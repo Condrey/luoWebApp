@@ -29,5 +29,5 @@ const NotesPage = async () => {
 }
 export default NotesPage
 export const metadata: Metadata = {
-    title: 'Notes-Luo.com'
+    title: `{webPageName}`
 }

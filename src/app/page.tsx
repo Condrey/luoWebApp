@@ -1,19 +1,16 @@
-import Image from "next/image";
-import logo from "@/assets/logo_amuka_singleton_monochrome_neutral.png";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {auth} from "@clerk/nextjs";
-import {redirect} from "next/navigation";
+import HomeNavBar from "@/app/(homeComponents)/NavBar";
+import BannerSection from "@/app/(homeComponents)/BannerSection";
 
 export default function Home() {
     const {userId} = auth()
-    if (userId) redirect("/notes")
+    // if (userId) redirect("/notes")
     return (
-        <main className="flex min-h-screen flex-col items-center  gap-5 p-24">
-            <div className="flex items-center gap-4">
-                <Image src={logo} alt={"Luo.com logo"} width={100} height={100}/>
-                <span className={"font-extrabold tracking-tight text-4xl lg:text-5xl"}>Luo.com</span>
-            </div>
+        <main className="flex min-h-screen flex-col">
+            <HomeNavBar/>
+            <BannerSection/>
             <p className={"text-center max-w-prose"}>
                 An intelligent note-taking app with Ai Integration, built with OPenAi, Pinecone, Next.js, Shadcn ui,
                 clerk, and more.
@@ -43,4 +40,10 @@ export default function Home() {
             Explore starter templates for Next.js.
           </p>
         </a>
+ */
+
+
+/**
+ *    An intelligent note-taking app with Ai Integration, built with OPenAi, Pinecone, Next.js, Shadcn ui,
+ *                 clerk, and more.
  */

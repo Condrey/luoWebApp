@@ -3,11 +3,12 @@ import {Inter} from 'next/font/google'
 import './globals.css'
 import {ClerkProvider} from "@clerk/nextjs";
 import {ThemeProvider} from "@/app/ThemeProvider";
+import {webPageName} from "@/lib/constants/Constants";
 
 const inter = Inter({subsets: ['latin']})
 
 export const metadata: Metadata = {
-    title: 'Luo.com',
+    title: `${webPageName}`,
     description: 'Our Culture, our pride',
 }
 
