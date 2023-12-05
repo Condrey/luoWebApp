@@ -5,6 +5,15 @@ const GrievancesPage = () => {
     return <div>
         <HomeNavBar/>
         Grievances
+        <svg>
+            <filter id='grainy'>
+                <feTurbulence
+                    type='turbulence'
+                    baseFrequency='1'/>
+            </filter>
+        </svg>
+
+        <span className='filter'>yfgiuihloip[]ohggii</span>
     </div>
 }
 export default GrievancesPage

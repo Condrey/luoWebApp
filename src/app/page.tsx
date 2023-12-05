@@ -3,6 +3,9 @@ import Link from "next/link";
 import {auth} from "@clerk/nextjs";
 import HomeNavBar from "@/app/(homeComponents)/NavBar";
 import BannerSection from "@/app/(homeComponents)/BannerSection";
+import CommentSection from "@/app/(homeComponents)/CommentSection";
+import IntroductionSection from "@/app/(homeComponents)/IntroductionSection";
+import VideosSection from "@/app/(homeComponents)/VideosSection";
 
 export default function Home() {
     const {userId} = auth()
@@ -11,6 +14,9 @@ export default function Home() {
         <main className="flex min-h-screen flex-col">
             <HomeNavBar/>
             <BannerSection/>
+            <CommentSection/>
+            <IntroductionSection/>
+            <VideosSection/>
             <p className={"text-center max-w-prose"}>
                 An intelligent note-taking app with Ai Integration, built with OPenAi, Pinecone, Next.js, Shadcn ui,
                 clerk, and more.
