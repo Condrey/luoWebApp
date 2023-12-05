@@ -48,14 +48,14 @@ const HomeNavBar = () => {
                 }
             </div>
 
-            <div className="flex justify-between gap-2">
-                <Link href="/" className="flex items-center gap-1">
+            <div className="flex justify-end md:justify-between gap-2">
+                <Link href="/" className=" items-center gap-1 hidden  md:flex">
                     <Image src={logo} alt={"Luo.com logo"} width={20} height={20}/>
                     <span className={"font-bold text-purple-600"}>{webPageName}</span>
                 </Link>
 
-                <div className="flex items-center gap-2">
-                    <Button variant='ghost' asChild>
+                <div className="flex items-center gap-2 ">
+                    <Button variant='ghost' asChild className='hidden  md:flex'>
                         <Link href='/contact-us'>
                             <Contact className='pr-1'/>
                             Contact-Us
@@ -74,7 +74,7 @@ const HomeNavBar = () => {
                             {
                                 baseTheme: theme === "dark" ? dark : undefined,
                                 elements: {
-                                    avatarBox: {width: "2.5rem", height: "2.5rem"}
+                                    avatarBox: {width: "1.8rem", height: "1.8rem"}
                                 }
                             }
                         }/>

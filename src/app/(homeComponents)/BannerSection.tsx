@@ -20,7 +20,7 @@ const BannerSection = () => {
 
             <div className='flex flex-col items-center text-center justify-center  gap-5 md:gap-10 '>
                     <span
-                        className="text-left md:text-center font-extrabold tracking-wide text-4xl lg:text-5xl max-w-prose ">
+                        className="font-extrabold tracking-wide text-4xl lg:text-5xl max-w-prose ">
                         No Akii Bua,&nbsp;
                         <span className='text-red-500'>No Votes,</span>
                         <br/>
@@ -71,7 +71,7 @@ const BannerSection = () => {
 
             </p>
 
-            <div className='flex gap-4 justify-center'>
+            <div className='flex gap-4 justify-center py-3'>
                 <Button className='max-w-prose ' variant='default' asChild>
                     <Link href='/grievances'>
                         POST A GRIEVANCE
