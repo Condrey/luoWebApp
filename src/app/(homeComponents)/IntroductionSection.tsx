@@ -7,22 +7,26 @@ const IntroductionSection = () => {
 
     return <div
         className='bg-gradient-to-b from-accent text-accent-foreground flex flex-col items-center justify-center p-5 w-full'>
-        <div className=' flex flex-col md:flex-row gap-5'>
+        <div className=' grid sm:grid-cols-2 gap-2 md:gap-5 max-w-7xl justify-center items-center'>
             <Image src={banner_desktop}
-                   className="hidden rounded-2xl md:block w-auto h-full"
+                   className="hidden rounded-2xl md:block w-auto h-full object-cover"
                    alt="Image of John Akii Bua"
             />
             <Image
                 src={banner_mobile}
-                className="block rounded md:hidden  w-auto h-auto"
+                className="block rounded md:hidden object-cover  w-screen h-auto"
                 alt="Image of John Akii Bua"
             />
-            <span className=' max-w-prose border p-4 rounded'>
-                            {"John Akii Bua, a legendary athlete and Uganda's first gold medalist, deserves an enduring tribute—a stadium that echoes the pride of the Lango community to which he belonged. The proposed \"Akii Bua Stadium\" is not just a structure of bricks and mortar; it's a symbol of resilience, inspiration, and a testament to the extraordinary achievements of one of our own. "}
-
-            </span>
+            <div
+                className='items-center justify-center flex flex-col md:flex-row xl:flex-col gap-4 bg-gray-700 text-gray-50  border p-4 px-6 rounded'>
+                <span className='text-7xl'>911</span>
+                <span
+                    className='max-w-prose px-6'>
+    {"John Akii Bua, a legendary athlete and Uganda's first gold medalist, deserves an enduring tribute—a stadium that echoes the pride of the Lango community to which he belonged. The proposed \"Akii Bua Stadium\" is not just a structure of bricks and mortar; it's a symbol of resilience, inspiration, and a testament to the extraordinary achievements of one of our own. "}
+</span>
+            </div>
         </div>
-        <div className='flex flex-col gap-5'>
+        <div className='flex flex-col gap-5 mt-20'>
             <div className='text-center  text-5xl text-primary dark:text-accent-foreground  font-black w-auto p-5'>
                 IMPORTANCE
             </div>

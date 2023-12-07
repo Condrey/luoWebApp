@@ -1,20 +1,9 @@
-import HomeNavBar from "@/app/(homeComponents)/NavBar";
 import {webPageName} from "@/lib/constants/Constants";
 
 const GrievancesPage = () => {
-    return <div>
-        <HomeNavBar/>
-        Grievances
-        <svg>
-            <filter id='grainy'>
-                <feTurbulence
-                    type='turbulence'
-                    baseFrequency='1'/>
-            </filter>
-        </svg>
+    return <main className="flex min-h-screen flex-col p-6">
 
-        <span className='filter'>yfgiuihloip[]ohggii</span>
-    </div>
+    </main>
 }
 export default GrievancesPage
 export const metadata = {

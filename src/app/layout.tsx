@@ -1,11 +1,10 @@
 import type {Metadata} from 'next'
-import {Inter} from 'next/font/google'
 import './globals.css'
 import {ClerkProvider} from "@clerk/nextjs";
 import {ThemeProvider} from "@/app/ThemeProvider";
 import {webPageName} from "@/lib/constants/Constants";
+import {inter} from "@/app/ui/fonts";
 
-const inter = Inter({subsets: ['latin']})
 
 export const metadata: Metadata = {
     title: `${webPageName}`,

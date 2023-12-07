@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -72,6 +73,8 @@ module.exports = {
       },
       backgroundImage: {
         'hero-pattern': "url('../../public/assets/hexagonal_texture.png')",
+        'stadium-pattern-light': "url('../../public/assets/stadium_lights_light.jpg')",
+        'stadium-pattern-dark': "url('../../public/assets/stadium_lights_dark.jpg')",
       },
     }
       },

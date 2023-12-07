@@ -1,7 +1,5 @@
 "use client"
 import Link from "next/link";
-import Image from "next/image";
-import logo from "@/assets/logo_amuka_singleton_monochrome_neutral.png";
 import {UserButton} from "@clerk/nextjs";
 import {dark} from "@clerk/themes";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
@@ -9,24 +7,27 @@ import {useTheme} from "next-themes";
 import {Button} from "@/components/ui/button";
 import {usePathname} from "next/navigation";
 import {Contact, HeartHandshake} from "lucide-react";
-import {webPageName} from "@/lib/constants/Constants";
 import {cn} from "@/lib/utils";
+import Logo from "@/app/(homeComponents)/Logo";
 
 const HomeNavBar = () => {
     const {theme} = useTheme()
     const pathName = usePathname()
     // About, Petition, Grievances, Merchandise, News, **Contact, and **Donate.
-    const links: { link: string, route: string }[] = [
-        {link: 'Home', route: '/'},
-        {link: 'About', route: '/about'},
-        {link: 'Petition', route: '/petition'},
-        {link: 'Grievances', route: '/grievances'},
-        {link: 'Merchandise', route: '/merchandise'},
-        {link: 'News', route: '/news'},
+    const links: { link: string, route: string, routeRef: string }[] = [
+        {link: 'Home', route: '/', routeRef: '/home'},
+        {link: 'About', route: '/about', routeRef: '/about'},
+        {link: 'Petition', route: '/petition', routeRef: '/petition'},
+        {link: 'Grievances', route: '/grievances', routeRef: '/grievances'},
+        {link: 'Merchandise', route: '/merchandise', routeRef: '/merchandise'},
+        {link: 'News', route: '/news', routeRef: '/news'},
     ]
-    return <div className="p-4 shadow">
-        <div className="flex flex-col-reverse gap-3  max-w-7xl">
-            <div className='flex flex-wrap gap-3'>
+    return <div className="p-4 shadow dark:shadow-none">
+        <div className="flex flex-col-reverse md:flex-row gap-3 justify-between  max-w-7xl">
+            <div className='flex flex-wrap gap-3 items-center'>
+                <div className=' justify-center items-center  sm:max-md:flex md:hidden'>
+                    <Logo/>
+                </div>
                 {
                     links.map((link) => (
 
@@ -35,7 +36,7 @@ const HomeNavBar = () => {
                             href={link.route}
                             className={cn(
                                 'flex hover:text-destructive dark:hover:text-primary',
-                                pathName === link.route ?
+                                pathName === link.route || pathName.startsWith(link.routeRef) ?
                                     'text-destructive dark:text-primary border-b-2 border-destructive dark:border-primary border-dotted'
                                     :
                                     'text-secondary-foreground dark:text-secondary'
@@ -49,10 +50,9 @@ const HomeNavBar = () => {
             </div>
 
             <div className="flex justify-end md:justify-between gap-2">
-                <Link href="/" className=" items-center gap-1 hidden  md:flex">
-                    <Image src={logo} alt={"Luo.com logo"} width={20} height={20}/>
-                    <span className={"font-bold text-purple-600"}>{webPageName}</span>
-                </Link>
+                <div className='flex justify-center items-center md:hidden'>
+                    <Logo/>
+                </div>
 
                 <div className="flex items-center gap-2 ">
                     <Button variant='ghost' asChild className='hidden  md:flex'>
