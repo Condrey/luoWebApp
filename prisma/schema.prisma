@@ -22,31 +22,75 @@ model Note {
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
-  name  String?
-  posts Post[]
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  email      String       @unique
+  name       String?
+  quotations Quotations[]
 
   @@map("users")
 }
 
-model Post {
+model Quotations {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String?
   occupation String
   published  Boolean  @default(false)
   author     User     @relation(fields: [authorId], references: [id])
-  authorId   String
+  authorId   String   @db.ObjectId
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@map("posts")
+  @@map("quotations")
 }
 
-model Occupation {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
+model VideoGallery {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  category             String
+  description          String
+  suggestedDescription String   @map("suggested_description")
+  userId               String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  @@map("occupations")
+  @@map("video_galleries")
+}
+
+model VideoGalleryDescription {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+
+  @@map("video_gallery_descriptions")
+}
+
+model VoiceNote {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  url           String
+  transcription String
+  userId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("voice_notes")
+}
+
+model Spotlight {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  poster      String
+  url         String
+  categoryId  String
+  description String
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("spotlights")
+}
+
+model SpotlightCategory {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  @@map("spotlight_categories")
 }

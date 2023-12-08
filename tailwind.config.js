@@ -76,6 +76,9 @@ module.exports = {
         'stadium-pattern-light': "url('../../public/assets/stadium_lights_light.jpg')",
         'stadium-pattern-dark': "url('../../public/assets/stadium_lights_dark.jpg')",
       },
+      listStyleImage: {
+        'star': 'url("../../public/assets/star.png")',
+      },
     }
       },
   plugins: [require("tailwindcss-animate")],

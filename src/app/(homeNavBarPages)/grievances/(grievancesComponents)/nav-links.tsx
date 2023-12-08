@@ -3,8 +3,7 @@ import {
     LightbulbIcon,
     LinkIcon,
     LucideProps,
-    PencilIcon,
-    SendIcon,
+    MessageCircleIcon,
     TextQuoteIcon,
     VideotapeIcon,
     VoicemailIcon,
@@ -44,10 +43,9 @@ export default function NavLinks() {
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links: { name: string, href: string, icon: React.ForwardRefExoticComponent<LucideProps> } [] = [
+    {name: 'Chat', href: '/grievances/chat', icon: MessageCircleIcon},
     {name: 'Video Gallery', href: '/grievances/video-gallery', icon: VideotapeIcon},
     {name: 'Voice Notes', href: '/grievances/voice-notes', icon: VoicemailIcon,},
     {name: 'Quotations', href: '/grievances/quotations', icon: TextQuoteIcon},
-    {name: 'Comments', href: '/grievances/comments', icon: PencilIcon},
     {name: 'Spotlight', href: '/grievances/spotlight', icon: LightbulbIcon},
-    {name: 'Submission', href: '/grievances/submission', icon: SendIcon},
 ];

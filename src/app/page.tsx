@@ -1,5 +1,3 @@
-import {Button} from "@/components/ui/button";
-import Link from "next/link";
 import {auth} from "@clerk/nextjs";
 import HomeNavBar from "@/app/(homeComponents)/NavBar";
 import BannerSection from "@/app/(homeComponents)/BannerSection";
@@ -17,13 +15,7 @@ export default function Home() {
             <CommentSection/>
             <IntroductionSection/>
             <VideosSection/>
-            <p className={"text-center max-w-prose"}>
-                An intelligent note-taking app with Ai Integration, built with OPenAi, Pinecone, Next.js, Shadcn ui,
-                clerk, and more.
-            </p>
-            <Button asChild>
-                <Link href={"/notes"}>Open</Link>
-            </Button>
+
         </main>
     )
 }
