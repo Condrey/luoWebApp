@@ -2,8 +2,8 @@
   "name": "luoapp",
   "version": "0.1.0",
   "private": true,
- "scripts": {
-    "dev": "next dev && npx next-video sync -w && npx prisma generate",
+  "scripts": {
+    "dev": "npx prisma generate && next dev && npx next-video sync -w",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
