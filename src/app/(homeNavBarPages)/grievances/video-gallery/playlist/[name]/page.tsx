@@ -18,7 +18,7 @@ export default function PlayListSongs({params}: PlayListSongsProps) {
             <Info className="h-4 w-4"/>
             <AlertTitle>Description</AlertTitle>
             <AlertDescription>
-                You can add components and dependencies to your app using the cli.
+                You can add components and dependencies to your app using the CLI.
             </AlertDescription>
         </Alert>
 
