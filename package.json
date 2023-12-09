@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev && npx next-video sync -w && npx prisma generate",
-    "build": "next build",
+    "build": "npx next-video sync -w && npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx next-video sync -w && npx prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.2",
