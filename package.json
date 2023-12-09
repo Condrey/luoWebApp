@@ -2,12 +2,12 @@
   "name": "luoapp",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev && npx next-video sync -w && npx prisma generate",
-    "build": "npx next-video sync -w && npx prisma generate && next build",
-    "start": "next start",
-    "lint": "next lint",
-  },
+"scripts": {
+  "dev": "concurrently \"next dev\" \"npx next-video sync -w\" \"npx prisma generate\"",
+  "build": "concurrently \"npx next-video sync -w\" \"npx prisma generate\" \"next build\"",
+  "start": "next start",
+  "lint": "next lint"
+},
   "dependencies": {
     "@clerk/nextjs": "^4.27.2",
     "@clerk/themes": "^1.7.9",
