@@ -26,6 +26,7 @@ const AddEditPlaylistDialog = ({open, setOpen, playListToEdit}: AddEditPlaylistD
         defaultValues: {
             name: playListToEdit?.name || '',
             description: playListToEdit?.description || '',
+            poster: playListToEdit?.poster || '',
         }
     })
 
@@ -94,6 +95,19 @@ const AddEditPlaylistDialog = ({open, setOpen, playListToEdit}: AddEditPlaylistD
                                     <FormLabel>Playlist name:</FormLabel>
                                     <FormControl>
                                         <Input placeholder={"Enter name of playlist"} {...field}/>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name={"poster"}
+                            control={form.control}
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Poster url:</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder={"Poster Url"} {...field}/>
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

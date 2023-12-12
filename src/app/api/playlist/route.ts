@@ -6,6 +6,7 @@ import {
     updateVideoPlaylistSchema
 } from "@/lib/validation/videoGalleryDescription";
 
+
 export async function POST(req: Request) {
     try {
         const body = await req.json()
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
             return Response.json({error: 'Invalid input'}, {status: 400})
         }
 
-        const {name, description} = parseResult.data
+        const {name, description, poster} = parseResult.data
         const {userId} = auth()
         if (!userId) {
             console.error("Not authorized")
@@ -25,6 +26,7 @@ export async function POST(req: Request) {
             data: {
                 name,
                 description,
+                poster
             }
         })
 
@@ -45,7 +47,7 @@ export async function PUT(req: Request) {
             return Response.json({error: 'Invalid input'}, {status: 400})
         }
 
-        const {id, name, description} = parseResult.data
+        const {id, name, description, poster} = parseResult.data
         const playlist = await prisma.videoGalleryDescription.findUnique({where: {id}})
         if (!playlist) {
             return Response.json({error: 'Playlist not found'}, {status: 404})
@@ -61,6 +63,7 @@ export async function PUT(req: Request) {
             data: {
                 name,
                 description,
+                poster
             }
         })
         return Response.json({updatePlaylist}, {status: 200})
@@ -97,4 +100,10 @@ export async function DELETE(req: Request) {
         console.error(e)
         return Response.json({error: "Internal server error"}, {status: 500})
     }
+}
+
+
+function getISOTimestamp() {
+    const currentTimestamp = Date.now();
+    return new Date(currentTimestamp).toISOString()
 }

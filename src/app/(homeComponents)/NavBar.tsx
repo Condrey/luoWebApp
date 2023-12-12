@@ -51,15 +51,10 @@ const HomeNavBar = () => {
                     <Logo/>
                 </div>
                 <NavigationMenu>
-                    <NavigationMenuList className='flex gap-1'>
+                    <NavigationMenuList className='flex gap-1 flex-wrap'>
                         {
                             links.map((link) => (
                                 <NavigationMenuItem key={link.link}>
-                                    {/*<NavigationMenuTrigger>{link.link}</NavigationMenuTrigger>*/}
-                                    {/*<NavigationMenuContent>*/}
-                                    {/*    <NavigationMenuLink>Link</NavigationMenuLink>*/}
-                                    {/*</NavigationMenuContent>*/}
-
                                     {link.content
                                         ?
                                         <>

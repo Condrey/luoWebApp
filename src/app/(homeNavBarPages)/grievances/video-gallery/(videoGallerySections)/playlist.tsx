@@ -13,9 +13,8 @@ export default async function PlaylistSection() {
         <span className='text-2xl font-bold'>Playlist</span>
         <div className='inline-flex'>
             <AddPlaylistButton/>
-
         </div>
-        <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2'>
+        <div className='grid sm:grid-cols-2  xl:grid-cols-4 gap-2 md:gap4'>
             {
                 allPlayLists.length > 0
                     ? <>

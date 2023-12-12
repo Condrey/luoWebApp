@@ -45,20 +45,23 @@ model Quotations {
 }
 
 model VideoGallery {
-  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
-  category             String
-  description          String
-  suggestedDescription String   @map("suggested_description")
-  userId               String
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  url         String
+  categoryId  String
+  description String
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("video_galleries")
 }
 
 model VideoGalleryDescription {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  uniqueId    DateTime @unique @default(now())
   name        String
+  poster      String?
   description String
 
   @@map("video_gallery_descriptions")
