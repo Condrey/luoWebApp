@@ -2,13 +2,18 @@ import {Button} from "@/components/ui/button";
 import {PlusIcon} from "lucide-react";
 import PlaylistSection from "@/app/(homeNavBarPages)/grievances/video-gallery/(videoGallerySections)/playlist";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
+import NavigateBack from "@/app/(homeNavBarPages)/grievances/(grievancesComponents)/navigate-back";
 
+interface VideoGalleryProps {
+    params?: { category: string }
+}
 
-export default function VideoGallery() {
+export default function VideoGallery({params}: VideoGalleryProps) {
+    const category = params?.category
+
     return <div className='flex flex-col gap-3'>
-
-
-        <Tabs defaultValue="playlist" className='flex flex-col items-center justify-center'>
+        <NavigateBack/>
+        <Tabs defaultValue={category ?? 'playlist'} className='flex flex-col items-center justify-center'>
             <TabsList>
                 <TabsTrigger value="playlist">All playlists</TabsTrigger>
                 <TabsTrigger value="videos">All videos</TabsTrigger>

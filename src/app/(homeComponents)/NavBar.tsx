@@ -139,7 +139,7 @@ const tabs: {
         ]
     },
     {
-        title: 'Video Gallery', href: '/grievances/video-gallery', icon: VideotapeIcon, listDescription: [
+        title: 'Video Gallery', href: '/grievances/video-gallery/playlist', icon: VideotapeIcon, listDescription: [
             ' Categorized videos expressing local grievances.',
             ' Brief descriptions for each video to provide context.',
             ' Playlists for easy navigation.'

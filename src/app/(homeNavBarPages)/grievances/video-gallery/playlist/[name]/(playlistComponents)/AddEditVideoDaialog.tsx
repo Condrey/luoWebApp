@@ -43,7 +43,8 @@ const AddEditVideoDialog = ({open, setOpen, videoToEdit, playlist, categories}: 
             title: videoToEdit?.title || '',
             url: videoToEdit?.url || '',
             categoryId: videoToEdit?.categoryId ?? category,
-            description: videoToEdit?.description ?? description,
+            // description: videoToEdit?.description ?? description,
+            description: '',
         }
     })
 
@@ -172,7 +173,7 @@ const AddEditVideoDialog = ({open, setOpen, videoToEdit, playlist, categories}: 
                             control={form.control}
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Description:</FormLabel>
+                                    <FormLabel>Description (You can customize):</FormLabel>
                                     <FormControl>
                                         <Textarea placeholder={"Describe the video"} {...field}/>
                                     </FormControl>

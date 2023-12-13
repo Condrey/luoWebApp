@@ -44,8 +44,8 @@ export default function NavLinks() {
 // Depending on the size of the application, this would be stored in a database.
 const links: { name: string, href: string, icon: React.ForwardRefExoticComponent<LucideProps> } [] = [
     {name: 'Chat', href: '/grievances/chat', icon: MessageCircleIcon},
-    {name: 'Video Gallery', href: '/grievances/video-gallery', icon: VideotapeIcon},
-    {name: 'Voice Notes', href: '/grievances/voice-notes', icon: VoicemailIcon,},
+    {name: 'Video Gallery', href: '/grievances/video-gallery/playlist', icon: VideotapeIcon},
+    {name: 'Voice Notes', href: '/grievances/voice-notes', icon: VoicemailIcon},
     {name: 'Quotations', href: '/grievances/quotations', icon: TextQuoteIcon},
     {name: 'Spotlight', href: '/grievances/spotlight', icon: LightbulbIcon},
 ];

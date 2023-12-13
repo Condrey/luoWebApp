@@ -1,10 +1,11 @@
 import prisma from "@/lib/db/prisma";
-import {InfoIcon, LinkIcon} from "lucide-react";
+import {ArrowLeft, FileVideo, InfoIcon, LinkIcon} from "lucide-react";
 import YouTubePlayer from "@/components/youtube-player";
 import {VideoGallery, VideoGalleryDescription} from ".prisma/client";
-import {Badge} from '@/components/ui/badge'
+import {Badge, badgeVariants} from '@/components/ui/badge'
 import VideoContainer from "@/components/video-container";
-import {Button} from "@/components/ui/button";
+import {buttonVariants} from "@/components/ui/button";
+import Link from "next/link";
 
 interface VideoPageProps {
     params: { videoUrl: string }
@@ -25,6 +26,17 @@ export default async function VideoPage({params}: VideoPageProps) {
     const videos = await prisma.videoGallery.findMany({where: {categoryId: video?.categoryId}})
 
     return <div>
+        <div className='flex flex-col gap-3'>
+            <div>
+                <Link href={'/'} title='Go back' className={badgeVariants({variant: 'default'})}>
+                    <ArrowLeft/> Back
+                </Link>
+            </div>
+
+            <div>
+                <span className='md:text-2xl'> <FileVideo className='float-left pr-1'/> {video?.title}</span>
+            </div>
+        </div>
         <div className='flex flex-col xl:flex-row h-full p-4 gap-4'>
             <div className='w-full flex flex-col gap-3'>
                 <div className='h-[300px] md:h-[500px]'>
@@ -61,8 +73,9 @@ function VideoParameters({video}: VideoParametersProp) {
 function SimilarPlaylist({videos, playlist}: SimilarPlaylistProp) {
     return <div className='flex flex-col gap-3'>
         <div className='flex flex-row gap-1'>
-            <Button>All</Button>
-            <Button>Playlists</Button>
+            <Link href={'/grievances/video-gallery/videos'} className={buttonVariants({variant: 'default'})}>All</Link>
+            <Link href={'/grievances/video-gallery/playlist'}
+                  className={buttonVariants({variant: 'default'})}>Playlists</Link>
             <Badge variant='outline'>{`${playlist?.name}`}</Badge>
         </div>
         <div className='flex flex-col gap-3'>

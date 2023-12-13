@@ -1,10 +1,12 @@
-import {Info, ListVideo} from "lucide-react";
+import {ArrowLeft, Info, ListVideo} from "lucide-react";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import prisma from "@/lib/db/prisma";
 import PlayListVideos
     from "@/app/(homeNavBarPages)/grievances/video-gallery/playlist/[name]/(playlistComponents)/videos";
 import AddVideoButton
     from "@/app/(homeNavBarPages)/grievances/video-gallery/playlist/[name]/(playlistComponents)/addVideoButton";
+import Link from "next/link";
+import {badgeVariants} from "@/components/ui/badge";
 
 
 interface PlayListSongsProps {
@@ -25,6 +27,14 @@ export default async function PlayListSongs({params}: PlayListSongsProps) {
 
 
     return <div className='flex flex-col gap-3'>
+        <div>
+            <Link href={'/grievances/video-gallery/playlist/'} className={badgeVariants({variant: "default"})}>
+                <ArrowLeft/>
+                Back
+            </Link>
+
+        </div>
+
         <div className='flex justify-between'>
             <div className='text-2xl font-bold flex items-center gap-2'>
                 <ListVideo/>
