@@ -6,12 +6,12 @@ import ProgressPetitions from "@/components/progressPetitions";
 import PetitionGrievanceCounter from "@/components/petitionGrievanceCounter";
 import PetitionGrievanceButtons from "@/components/petitionGrievanceButtons";
 import DominantFiguresPetitions from "@/app/(homeNavBarPages)/petition/(petitionComponents)/DominantFiguresPetitions";
-import PrivacyPoilicySection from "@/app/(homeNavBarPages)/petition/(petitionComponents)/PrivacyPoilicySection";
+import PrivacyPolicySection from "@/app/(homeNavBarPages)/petition/(petitionComponents)/PrivacyPolicySection";
 
 const PetitionPage = () => {
     return <div>
         <HomeNavBar/>
-        <div className='flex flex-col md:flex-row-reverse'>
+        <div className='flex flex-col md:flex-row-reverse gap-12 py-12'>
             <div className='w-full md:w-1/3 px-6 mb-6'>
                 <ProgressPetitions/>
             </div>
@@ -19,13 +19,15 @@ const PetitionPage = () => {
                 <Introduction/>
             </div>
         </div>
-        <div className='bg-accent md:px-2 py-4 flex flex-col items-center justify-center w-full gap-4 px-4'>
+        <div className='bg-accent md:px-2 py-12 flex flex-col items-center justify-center w-full gap-12 px-4'>
             <PetitionGrievanceCounter/>
-            <PetitionGrievanceButtons/>
+            <PetitionGrievanceButtons pathName={'/petition'}/>
             <DominantFiguresPetitions/>
-            <PrivacyPoilicySection/>
+            <PrivacyPolicySection/>
         </div>
-        <SocialMediaShares/>
+        <div className='flex flex-col items-center py-12'>
+            <SocialMediaShares/>
+        </div>
 
 
     </div>

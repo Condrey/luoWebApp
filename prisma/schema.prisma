@@ -22,51 +22,187 @@ model Note {
 }
 
 model User {
-  id         String       @id @default(auto()) @map("_id") @db.ObjectId
-  email      String       @unique
-  name       String?
-  quotations Quotations[]
+  id                  String               @id @default(auto()) @map("_id") @db.ObjectId
+  email               String               @unique
+  name                String?
+  quotations          Quotations[]
+  productRatings      ProductRating[]
+  productComments     ProductComment[]
+  product             Product?             @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId           String?              @db.ObjectId
+  topics              Topic[]
+  topicComments       TopicComment[]
+  topicLikeOrDisLikes TopicLikeOrDisLike[]
 
   @@map("users")
 }
 
+// for product
+model Product {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  images            ProductImage[]
+  name              String
+  category          ProductCategory  @relation(fields: [productCategoryId], references: [id])
+  size              ProductSize      @relation(fields: [productSizeId], references: [id])
+  color             ProductColor     @relation(fields: [productColorId], references: [id])
+  description       String
+  amount            Int
+  seller            Seller           @relation(fields: [sellerId], references: [id])
+  quantity          Int
+  discount          Int?             @default(0)
+  ratings           ProductRating[]
+  comments          ProductComment[]
+  productCategoryId String           @db.ObjectId
+  productSizeId     String           @db.ObjectId
+  productColorId    String           @db.ObjectId
+  sellerId          String           @db.ObjectId
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  cartItems         CartItem[]
+  users             User[]
+
+  @@map("products")
+}
+
+model Cart {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String  @db.ObjectId
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  quantity  Int
+  cartId    String  @db.ObjectId
+
+  @@map("cart_items")
+}
+
+model ProductImage {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  position   Position @relation(fields: [positionId], references: [id])
+  Product    Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String?  @db.ObjectId
+  positionId String   @db.ObjectId
+
+  @@map("images")
+}
+
+model Position {
+  id     String         @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  images ProductImage[]
+
+  @@map("positions")
+}
+
+model ProductCategory {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  products Product[]
+
+  @@map("product_categories")
+}
+
+model ProductSize {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  products Product[]
+
+  @@map("product_sizes")
+}
+
+model ProductColor {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  products Product[]
+
+  @@map("product_colors")
+}
+
+model Seller {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  location String
+  shop     String
+  district String
+  products Product[]
+
+  @@map("sellers")
+}
+
+model ProductRating {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  rating    String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String?  @db.ObjectId
+  userId    String   @db.ObjectId
+
+  @@map("product_ratings")
+}
+
+model ProductComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String?  @db.ObjectId
+  userId    String   @db.ObjectId
+
+  @@map("product_comments")
+}
+
+// Quotations
 model Quotations {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   title      String
-  content    String?
-  occupation String
+  content    String
+  occupation String?
   published  Boolean  @default(false)
-  author     User     @relation(fields: [authorId], references: [id])
-  authorId   String   @db.ObjectId
+  authorId   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  User       User?    @relation(fields: [userId], references: [id])
+  userId     String?  @db.ObjectId
 
   @@map("quotations")
 }
 
+// Video Gallery
 model VideoGallery {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  url         String
-  categoryId  String
-  description String
-  userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                        String                   @id @default(auto()) @map("_id") @db.ObjectId
+  title                     String
+  url                       String
+  categoryId                String
+  type                      VideoGalleryDescription? @relation(fields: [videoGalleryDescriptionId], references: [id])
+  description               String
+  userId                    String
+  createdAt                 DateTime                 @default(now())
+  updatedAt                 DateTime                 @updatedAt
+  videoGalleryDescriptionId String?                  @db.ObjectId
 
   @@map("video_galleries")
 }
 
 model VideoGalleryDescription {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  uniqueId    DateTime @unique @default(now())
-  name        String
-  poster      String?
-  description String
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  uniqueId       DateTime       @unique @default(now())
+  name           String
+  poster         String?
+  description    String
+  videoGalleries VideoGallery[]
 
   @@map("video_gallery_descriptions")
 }
 
+// Voice Notes
 model VoiceNote {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   url           String
@@ -78,6 +214,7 @@ model VoiceNote {
   @@map("voice_notes")
 }
 
+// SPotlight
 model Spotlight {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   poster      String
@@ -96,4 +233,60 @@ model SpotlightCategory {
   name String
 
   @@map("spotlight_categories")
+}
+
+// Petition
+model Petition {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  showDetails Boolean  @default(false)
+  district    String
+  userId      String
+
+  @@map("petitions")
+}
+
+// Topic
+model Topic {
+  id                  String               @id @default(auto()) @map("_id") @db.ObjectId
+  title               String
+  author              User                 @relation(fields: [userId], references: [id])
+  topicLikeOrDisLikes TopicLikeOrDisLike[]
+  comments            TopicComment[]
+  Priority            Int                  @default(0)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  userId              String               @db.ObjectId
+
+  @@map("topics")
+}
+
+model TopicComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   String
+  author    User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Topic     Topic?   @relation(fields: [topicId], references: [id])
+  topicId   String?  @db.ObjectId
+  userId    String   @db.ObjectId
+
+  @@map("topic_commments")
+}
+
+model TopicLikeOrDisLike {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  likeOrDislike LikeOrDislike @default(DEFAULT)
+  author        User          @relation(fields: [userId], references: [id])
+  topic         Topic         @relation(fields: [topicId], references: [id])
+  userId        String        @db.ObjectId
+  topicId       String        @db.ObjectId
+
+  @@map("topic_likes_or_dislikes")
+}
+
+enum LikeOrDislike {
+  LIKE
+  DISLIKE
+  DEFAULT
 }

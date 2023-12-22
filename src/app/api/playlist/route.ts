@@ -4,7 +4,7 @@ import {
     createVideoPlaylistSchema,
     deleteVideoPlaylistSchema,
     updateVideoPlaylistSchema
-} from "@/lib/validation/videoGalleryDescription";
+} from "@/lib/db/validation/videoGalleryDescription";
 
 
 export async function POST(req: Request) {
@@ -100,10 +100,4 @@ export async function DELETE(req: Request) {
         console.error(e)
         return Response.json({error: "Internal server error"}, {status: 500})
     }
-}
-
-
-function getISOTimestamp() {
-    const currentTimestamp = Date.now();
-    return new Date(currentTimestamp).toISOString()
 }

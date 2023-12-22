@@ -9,7 +9,7 @@ const NotesPage = async () => {
         throw Error("userId undefined")
     }
     const allNotes = await prisma.note.findMany({where: {userId}})
-    return <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+    return <div className='grid gap-3  sm:grid-cols-2 xl:grid-cols-3 '>
         {
             allNotes.length > 0
                 ? <>

@@ -2,7 +2,7 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 const CommentSection = () => {
-    return <div className={`p-5 w-full  dark:bg-hero-pattern `}>
+    return <div className='p-5 w-full dark:bg-hero-pattern  bg-contain bg-repeat-x '>
         <div className='text-center  text-5xl text-primary dark:text-secondary  font-black w-auto p-5'>GRIEVANCES</div>
         <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5'>
             <Card className='w-auto'>

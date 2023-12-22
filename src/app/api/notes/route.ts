@@ -1,4 +1,4 @@
-import {createNoteSchema, deleteNotesSchema, updateNotesSchema} from "@/lib/validation/note";
+import {createNoteSchema, deleteNotesSchema, updateNotesSchema} from "@/lib/db/validation/note";
 import {auth} from "@clerk/nextjs";
 import prisma from "@/lib/db/prisma";
 import {getEmbedding} from "@/lib/openai";

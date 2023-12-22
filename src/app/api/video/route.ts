@@ -4,7 +4,7 @@ import {
     createVideoGallerySchema,
     deleteVideoGallerySchema,
     updateVideoGallerySchema
-} from "@/lib/validation/videoGallery";
+} from "@/lib/db/validation/videoGallery";
 
 
 export async function POST(req: Request) {
@@ -28,7 +28,8 @@ export async function POST(req: Request) {
                 url,
                 categoryId,
                 description,
-                userId
+                userId,
+                videoGalleryDescriptionId: categoryId,
             }
         })
 

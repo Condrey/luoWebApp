@@ -1,12 +1,21 @@
 import {webPageName} from "@/lib/constants/Constants";
-import {Button} from "@/components/ui/button";
-import {ArrowRight} from "lucide-react";
+import AddPetitionButton from "@/app/(homeNavBarPages)/petition/(petitionComponents)/AddPetitionButton";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
 export default function Introduction() {
-    return <div className='items-center justify-center flex flex-col gap-6'>
+
+    return <div className='items-start justify-center flex flex-col gap-6'>
         <div className='max-w-prose flex flex-col gap-3 text-justify'>
             <span className='text-2xl'>{titleIntro}</span>
-            <p className='whitespace-pre-line'>{introContent}</p>
+            <div className='whitespace-pre-line'>
+                <Avatar className='float-left mx-2 w-[100px] h-[100px]'>
+                    <AvatarImage
+                        src={'https://firebasestorage.googleapis.com/v0/b/luo-app-d2356.appspot.com/o/profiles%2Fcolorful-drawing-fist-with-word-peace-it_62972-384.webp?alt=media&token=1c8a2b21-f922-4b2e-a07a-4c68805a58e1'}/>
+                    <AvatarFallback>Mw</AvatarFallback>
+                </Avatar>
+                <span>{introContent}</span>
+
+            </div>
         </div>
 
         <div className='max-w-prose flex flex-col gap-4 text-justify'>
@@ -20,12 +29,9 @@ export default function Introduction() {
             }
         </div>
 
-        <div className='flex flex-col gap-4 max-w-prose'>
-            <Button variant={'destructive'}>
-                Sign the petition
-                <ArrowRight/>
-            </Button>
-            <p className='whitespace-pre-line max-w-prose text-center'>{conclusion}</p>
+        <div className='flex flex-col gap-8  '>
+            <AddPetitionButton/>
+            <p className='whitespace-pre-line max-w-prose  text-justify'>{conclusion}</p>
         </div>
 
 
@@ -38,7 +44,7 @@ const introContent: string = 'Dear Supporters,\n' +
     'Welcome to our petition to rally support for the rightful location of the Akii Bua Stadium. The purpose of this petition is simple yet profound: we firmly believe that the stadium, honoring Uganda\'s first gold medalist, John Akii Bua, should be built in Lira, the heart of the Lango community.'
 const conclusion: string = 'Thank you for being a crucial part of this movement.\n' +
     'Sincerely,\n' +
-    `${webPageName}`
+    `${webPageName}.`
 const inplorations: { title: string, content: string | undefined }[] = [
     {
         title: 'Why Lira?',

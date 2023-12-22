@@ -9,7 +9,7 @@ import fetch from "node-fetch";
 import {useRouter} from "next/navigation";
 import {VideoGallery, VideoGalleryDescription} from ".prisma/client";
 import {useState} from "react";
-import {createVideoGallerySchema, CreateVideoGallerySchema} from "@/lib/validation/videoGallery";
+import {createVideoGallerySchema, CreateVideoGallerySchema} from "@/lib/db/validation/videoGallery";
 import {
     Select,
     SelectContent,

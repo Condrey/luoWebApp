@@ -1,28 +1,34 @@
-import React from 'react';
+import {clsx} from 'clsx';
+import Link from 'next/link';
+import {lusitana} from '@/app/ui/fonts';
 
-interface BreadcrumbItem {
-    label: string;
-    link?: string;
+interface BreadcrumbsProp {
+    label: string | undefined;
+    href: string;
+    active?: boolean;
 }
 
-interface BreadcrumbProps {
-    items: BreadcrumbItem[];
-}
-
-export default function Breadcrumb({items}: BreadcrumbProps) {
+export default function Breadcrumbs({
+                                        breadcrumbs,
+                                    }: {
+    breadcrumbs: BreadcrumbsProp[];
+}) {
     return (
-        <nav className="breadcrumb">
-            <ul>
-                {items.map((item, index) => (
-                    <li key={index}>
-                        {item.link ? (
-                            <a href={item.link}>{item.label}</a>
-                        ) : (
-                            <span>{item.label}</span>
-                        )}
+        <nav aria-label="Breadcrumb" className="mb-6 block">
+            <ol className={clsx(lusitana.className, 'flex text-sm sm:text-xl')}>
+                {breadcrumbs.map((breadcrumb, index) => (
+                    <li
+                        key={breadcrumb.href}
+                        aria-current={breadcrumb.active}
+                        className='flex flex-nowrap text-gray-500 last:text-gray-900 last:dark:text-slate-200 '
+                    >
+                        <Link href={breadcrumb.href} className='line-clamp-1'>{breadcrumb.label}</Link>
+                        {index < breadcrumbs.length - 1 ? (
+                            <span className="mx-3 inline-block">/</span>
+                        ) : null}
                     </li>
                 ))}
-            </ul>
+            </ol>
         </nav>
     );
-};
+}

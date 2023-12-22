@@ -4,7 +4,7 @@ import {ArrowLeft} from "lucide-react";
 
 export default function NavigateBack() {
     return <div>
-        <Link href={'/grievances'} className={badgeVariants({variant: "default"})}>
+        <Link title='Navigate back to grievances' href={'/grievances'} className={badgeVariants({variant: "default"})}>
             <ArrowLeft/>
             Back
         </Link>

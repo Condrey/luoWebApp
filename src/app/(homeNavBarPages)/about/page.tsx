@@ -5,15 +5,15 @@ import NamingStadium from "@/app/(homeNavBarPages)/about/(aboutComponents)/Namin
 
 
 const AboutPage = () => {
-    return <div>
-        <div className='bg-stadium-pattern-light  dark:bg-stadium-pattern-dark bg-no-repeat bg-cover  bg-fixed '>
+    return <div className='pb-12'>
+        <div className='bg-stadium-pattern-dark bg-no-repeat bg-cover  bg-fixed '>
             <div
-                className='bg-gradient-to-br from-background from-45% to-bg-background/90 w-full pb-5'>
+                className='bg-gradient-to-tl from-background from-50% to-bg-background/90 w-full flex flex-col pb-12 gap-12'>
                 <HomeNavBar/>
                 <Introduction/>
             </div>
         </div>
-        <div className='items-center justify-center flex bg-gradient-to-b  from-slate-400/60 dark:from-accent'>
+        <div className='items-center justify-center flex '>
             <NamingStadium/>
         </div>
     </div>

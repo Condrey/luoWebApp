@@ -4,7 +4,7 @@ import johnAkiiBuaImage1 from '@/assets/akii_bua-desktop.jpg'
 
 export default function Introduction() {
     return <div className='flex items-center justify-center my-5 px-2 w-full '>
-        <div className=' bg-slate-400/5 dark:bg-slate-900/75   py-2 px-6 rounded text-slate-900 dark:text-slate-50'>
+        <div className='py-2 px-6 text-justify rounded text-slate-900 dark:text-slate-50'>
             <Image src={johnAkiiBuaImage1} alt={'Image of John Akii Bua'}
                    className='w-[150px] sm:w-auto max-w-xs rounded-md float-left mr-2 sm:mr-4 mb-4'/>
             <p className='max-w-prose whitespace-pre-line break-words'>{introductionText}</p>

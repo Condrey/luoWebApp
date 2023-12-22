@@ -9,7 +9,7 @@ import fetch from "node-fetch";
 import {useRouter} from "next/navigation";
 import {VideoGalleryDescription} from ".prisma/client";
 import {useState} from "react";
-import {createVideoPlaylistSchema, CreateVideoPlaylistSchema} from "@/lib/validation/videoGalleryDescription";
+import {createVideoPlaylistSchema, CreateVideoPlaylistSchema} from "@/lib/db/validation/videoGalleryDescription";
 
 
 interface AddEditPlaylistDialogProps {
@@ -18,7 +18,7 @@ interface AddEditPlaylistDialogProps {
     playListToEdit?: VideoGalleryDescription
 }
 
-const AddEditPlaylistDialog = ({open, setOpen, playListToEdit}: AddEditPlaylistDialogProps) => {
+export default function AddEditPlaylistDialog({open, setOpen, playListToEdit}: AddEditPlaylistDialogProps) {
     const router = useRouter()
     const [deleteInProgress, setDeleteInProgress] = useState(false)
     const form = useForm<CreateVideoPlaylistSchema>({
@@ -154,4 +154,3 @@ const AddEditPlaylistDialog = ({open, setOpen, playListToEdit}: AddEditPlaylistD
         </Dialog>
     )
 }
-export default AddEditPlaylistDialog

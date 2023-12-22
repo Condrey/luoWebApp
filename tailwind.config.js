@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -79,6 +78,10 @@ module.exports = {
       listStyleImage: {
         'star': 'url("../../public/assets/star.png")',
       },
+      content: {
+        'check-box': 'url("../../public/assets/checkbox.png")',
+      },
+
     }
       },
   plugins: [require("tailwindcss-animate")],

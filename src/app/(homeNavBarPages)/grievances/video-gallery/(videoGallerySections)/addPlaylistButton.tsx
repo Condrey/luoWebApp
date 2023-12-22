@@ -11,9 +11,9 @@ export default function AddPlaylistButton() {
     const [showAddEditPlaylistDialog, setShowAddEditPlaylistDialog] = useState(false)
 
     return <>
-        <Button onClick={() => setShowAddEditPlaylistDialog(true)}>
-            <Plus size={20} className="mr-2"/>
-            Playlist
+        <Button variant='destructive' onClick={() => setShowAddEditPlaylistDialog(true)}>
+            <Plus className="mr-2"/>
+            Add Playlist
         </Button>
         <AddEditPlaylistDialog open={showAddEditPlaylistDialog} setOpen={setShowAddEditPlaylistDialog}/>
     </>

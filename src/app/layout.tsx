@@ -4,6 +4,7 @@ import {ClerkProvider} from "@clerk/nextjs";
 import {ThemeProvider} from "@/app/ThemeProvider";
 import {webPageName} from "@/lib/constants/Constants";
 import {inter} from "@/app/ui/fonts";
+import {Toaster} from "@/components/ui/toaster";
 
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class">
                 {children}
             </ThemeProvider>
+            <Toaster/>
             </body>
             </html>
         </ClerkProvider>

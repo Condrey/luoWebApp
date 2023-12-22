@@ -1,12 +1,13 @@
 // import johnAkiiBuaImage2 from '@/assets/show-photo-icon-mobile.jpg'
 
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {SpeakerIcon} from "lucide-react";
+import {Badge} from "@/components/ui/badge";
 
 export default function NamingStadium() {
     return <div
-        className='flex flex-col max-w-7xl items-center justify-center p-3 gap-4 text-justify'>
+        className='flex flex-col max-w-7xl items-center justify-center py-3 px-6 gap-6 text-justify'>
         <div className='flex flex-col max-w-prose gap-1'>
-            <span className='text-2xl font-bold uppercase'>{title}</span>
+            <span className='text-2xl font-bold uppercase text-start text-balance'>{title}</span>
             <p>{introduction}</p>
         </div>
         <div className='flex flex-col gap-3 md:gap-6 max-w-prose '>
@@ -20,16 +21,16 @@ export default function NamingStadium() {
         <div className='max-w-prose'>
             <p>{conclusion}</p>
         </div>
-        <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4'>
+        <div className='flex flex-col max-w-prose gap-4 pt-6 py-3'>
+            <div>
+                <Badge variant='secondary' className='text-3xl inline-flex gap-2'> <SpeakerIcon/> Voices</Badge>
+            </div>
+
             {quotes.map((quote) => (
-                <Card key={quote.title} className='bg-gradient-to-br from-blue-950 to-fuchsia-400 text-slate-50'>
-                    <CardHeader>
-                        <CardTitle>{quote.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p>{quote.content}</p>
-                    </CardContent>
-                </Card>
+                <div key={quote.title}>
+                    <span className='text-2xl'>{quote.title}</span>
+                    <p className='indent-8 py-3'>{quote.content}</p>
+                </div>
 
             ))}
         </div>

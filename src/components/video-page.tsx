@@ -1,14 +1,16 @@
 import prisma from "@/lib/db/prisma";
-import {ArrowLeft, FileVideo, InfoIcon, LinkIcon} from "lucide-react";
+import {FileVideo, InfoIcon, LinkIcon} from "lucide-react";
 import YouTubePlayer from "@/components/youtube-player";
 import {VideoGallery, VideoGalleryDescription} from ".prisma/client";
-import {Badge, badgeVariants} from '@/components/ui/badge'
+import {Badge} from '@/components/ui/badge'
 import VideoContainer from "@/components/video-container";
 import {buttonVariants} from "@/components/ui/button";
 import Link from "next/link";
 
 interface VideoPageProps {
-    params: { videoUrl: string }
+    params: { videoUrl: string | null }
+    fromVideoSection?: boolean
+
 }
 
 interface VideoParametersProp {
@@ -18,20 +20,16 @@ interface VideoParametersProp {
 interface SimilarPlaylistProp {
     videos: VideoGallery[]
     playlist?: VideoGalleryDescription
+    fromVideoSection?: boolean
 }
 
-export default async function VideoPage({params}: VideoPageProps) {
-    const video = await prisma.videoGallery.findUnique({where: {id: params.videoUrl}})
+export default async function VideoPage({params, fromVideoSection}: VideoPageProps) {
+    const video = await prisma.videoGallery.findUnique({where: {id: params.videoUrl!}})
     const playlist = await prisma.videoGalleryDescription.findUnique({where: {id: video?.categoryId}})
     const videos = await prisma.videoGallery.findMany({where: {categoryId: video?.categoryId}})
 
     return <div>
         <div className='flex flex-col gap-3'>
-            <div>
-                <Link href={'/'} title='Go back' className={badgeVariants({variant: 'default'})}>
-                    <ArrowLeft/> Back
-                </Link>
-            </div>
 
             <div>
                 <span className='md:text-2xl'> <FileVideo className='float-left pr-1'/> {video?.title}</span>
@@ -45,7 +43,7 @@ export default async function VideoPage({params}: VideoPageProps) {
                 <VideoParameters video={video!}/>
             </div>
             <div className='p-2 md:p-4 xl:w-1/3 flex flex-col gap-3  '>
-                <SimilarPlaylist videos={videos!} playlist={playlist!}/>
+                <SimilarPlaylist videos={videos!} playlist={playlist!} fromVideoSection={fromVideoSection}/>
             </div>
         </div>
     </div>
@@ -70,7 +68,7 @@ function VideoParameters({video}: VideoParametersProp) {
     </div>
 }
 
-function SimilarPlaylist({videos, playlist}: SimilarPlaylistProp) {
+function SimilarPlaylist({videos, playlist, fromVideoSection = false}: SimilarPlaylistProp) {
     return <div className='flex flex-col gap-3'>
         <div className='flex flex-row gap-1'>
             <Link href={'/grievances/video-gallery/videos'} className={buttonVariants({variant: 'default'})}>All</Link>
@@ -82,7 +80,7 @@ function SimilarPlaylist({videos, playlist}: SimilarPlaylistProp) {
             {
                 videos.map((video) => (
                     <div key={video.id}>
-                        <VideoContainer video={video}/>
+                        <VideoContainer video={video} fromVideoSection={fromVideoSection}/>
                     </div>
                 ))
             }

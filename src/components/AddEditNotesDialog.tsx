@@ -1,5 +1,5 @@
 import {useForm} from "react-hook-form";
-import {createNoteSchema, CreateNoteSchema} from "@/lib/validation/note";
+import {createNoteSchema, CreateNoteSchema} from "@/lib/db/validation/note";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
