@@ -1,4 +1,4 @@
-import {unstable_noStore as noStore} from 'next/cache'
+import {unstable_noStore as noStore,} from 'next/cache'
 import prisma from "@/lib/db/prisma";
 import {formatDateToLocal} from "@/lib/utils";
 import {clerkClient, currentUser} from "@clerk/nextjs";
@@ -38,6 +38,7 @@ export async function fetchPetitionNumber() {
 
 export async function fetchPetitionStatistics() {
     try {
+
         const query = await prisma.petition.groupBy({
             by: ['district'],
             _count: {
@@ -96,6 +97,7 @@ export async function hasUserSignedPetition() {
 export async function populateCounter() {
     noStore()
     try {
+
         const petitionCountPromise = prisma.petition.count()
         const videosCountPromise = prisma.videoGallery.count()
         const playlistCountPromise = prisma.videoGalleryDescription.count()
@@ -120,3 +122,5 @@ export async function populateCounter() {
     }
 
 }
+
+//       await new Promise((resolve) => setTimeout(resolve, 10000));

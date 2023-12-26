@@ -11,6 +11,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {toast} from "@/components/ui/use-toast";
 import {useRouter} from "next/navigation";
 import {createPetition, deletePetition} from "@/lib/db/actions/petition-action";
+import {ServerMessage} from "@/lib/utils";
 
 
 interface AddEditPetitionDialogProps {
@@ -34,20 +35,20 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
     async function onSubmit(input: CreatePetitionSchema) {
         try {
             if (petitionToEdit) {
-                console.log('inputting-: ', input)
 
                 // const response = await axios.put("/api/petition", JSON.stringify({id: petitionToEdit.id, ...input}));
                 // if (!response.data) {
                 //     throw Error("Status code: " + response.status)
                 // }
-                const response = await createPetition(input)
+                const response: ServerMessage = await createPetition(input)
                 toast({
+                    title: response.title !,
                     description: (
                         <span className='whitespace-pre-line'>
-                            {response.message ? response.message : 'Edit success.!'}
+                            {response.message}
                         </span>
                     ),
-                    variant: response.message ? 'destructive' : 'default',
+                    variant: response.type === 'error' ? 'destructive' : 'default',
                 })
 
             } else {
@@ -55,14 +56,15 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
                 // if (!response.data) {
                 //     throw Error("Empty response data");
                 // }
-                const response = await createPetition(input)
+                const response: ServerMessage = await createPetition(input)
                 toast({
+                    title: response.title !,
                     description: (
                         <span className='whitespace-pre-line'>
-                            {response.message ? response.message : 'Added successfully.!'}
+                            {response.message}
                         </span>
                     ),
-                    variant: response.message ? 'destructive' : 'default',
+                    variant: response.type === 'error' ? 'destructive' : 'default',
                 })
 
                 form.reset()
@@ -73,7 +75,9 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
             console.error(e)
             toast({
                 title: 'Warning!',
-                description: 'Something went wrong, please try again.'
+                description: 'Something went wrong, please try again.',
+                variant: 'destructive'
+
             })
 
         }
@@ -87,11 +91,13 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
             // if (!response.data) {
             //     throw Error("Empty response data");
             // }
-            const response = await deletePetition(petitionToEdit)
+            const response: ServerMessage = await deletePetition(petitionToEdit)
             toast({
+                title: response.title!,
                 description: (
+
                     <span className='whitespace-pre-line'>
-                            {response.message ? response.message : 'Successfully deleted.!.!'}
+                            {response.message}
                         </span>
                 ),
                 variant: 'destructive',
@@ -103,7 +109,8 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
             console.error(e)
             toast({
                 title: 'Warning!',
-                description: 'Something went wrong, please try again.'
+                description: 'Something went wrong, please try again.',
+                variant: 'destructive'
             })
         } finally {
             setDeleteInProgress(false)
@@ -131,7 +138,7 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
                                     <FormLabel>District/ City:</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder={"Please enter your district/ city for easy querrying..."} {...field}/>
+                                            placeholder={"Please enter your district/ city for easy querying..."} {...field}/>
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -142,15 +149,16 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
                             control={form.control}
                             render={({field}) => (
                                 <FormItem
-                                    className="flex flex-row items-start space-x-3 space-y-0 rounded-md  p-4">
+                                    className="peer-has-[:checked]:ring-indigo-500 flex flex-row items-start space-x-3 space-y-0 rounded-md  p-4">
                                     <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}/>
+                                        <Checkbox className='peer'
+                                                  checked={field.value}
+                                                  onCheckedChange={field.onChange}/>
                                     </FormControl>
                                     <div className="space-y-1 leading-none">
-                                        <FormLabel>Show my details</FormLabel>
-                                        <FormDescription>Visitors of the page will be able to view your name and image
+                                        <FormLabel className='cursor-pointer'>Show my details</FormLabel>
+                                        <FormDescription>Visitors of the page will
+                                            be able to view your name and image
                                             only</FormDescription>
                                     </div>
                                     <FormMessage/>

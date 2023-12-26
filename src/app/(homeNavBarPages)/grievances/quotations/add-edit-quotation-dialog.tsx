@@ -11,6 +11,7 @@ import {useRouter} from "next/navigation";
 import {createQuotationSchema, CreateQuotationSchema} from "@/lib/db/validation/quotation";
 import {createQuotation, deleteQuotation, updateQuotation} from "@/lib/db/actions/quotation-action";
 import {Textarea} from "@/components/ui/textarea";
+import {ServerMessage} from "@/lib/utils";
 
 
 interface AddEditQuotationDialogProps {
@@ -36,25 +37,27 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
         try {
             if (quotationToEdit) {
 
-                const response = await updateQuotation(input)
+                const response:ServerMessage = await updateQuotation(input)
                 toast({
+                    title:response.title!,
                     description: (
                         <span className='whitespace-pre-line'>
-                            {response.message ? response.message : 'Edit success.!'}
+                            {response.message }
                         </span>
                     ),
-                    variant: response.message ? 'destructive' : 'default',
+                    variant: response.type==='error' ? 'destructive' : 'default',
                 })
             } else {
-                const response = await createQuotation(input)
+                const response:ServerMessage = await createQuotation(input)
 
                 toast({
+                    title:response.title!,
                     description: (
                         <span className='whitespace-pre-line'>
-                            {response.message ? response.message : 'Added successfully.!'}
+                            {response.message }
                         </span>
                     ),
-                    variant: response.message ? 'destructive' : 'default',
+                    variant: response.type==="error" ? 'destructive' : 'default',
                 })
 
                 form.reset()
@@ -65,7 +68,8 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
             console.error(e)
             toast({
                 title: 'Warning!',
-                description: 'Something went wrong, please try again.'
+                description: 'Something went wrong, please try again.',
+                variant: 'destructive'
             })
 
         }
@@ -75,11 +79,12 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
         if (!quotationToEdit) return
         setDeleteInProgress(true)
         try {
-            const response = await deleteQuotation(quotationToEdit)
+            const response:ServerMessage = await deleteQuotation(quotationToEdit)
             toast({
+                title:response.title!,
                 description: (
                     <span className='whitespace-pre-line'>
-                            {response.message ? response.message : 'Deleted successfully.!'}
+                            {response.message }
                         </span>
                 ),
                 variant: 'destructive',
@@ -91,7 +96,9 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
             console.error(e)
             toast({
                 title: 'Warning!',
-                description: 'Something went wrong, please try again.'
+                description: 'Something went wrong, please try again.',
+                variant: 'destructive',
+
             })
         } finally {
             setDeleteInProgress(false)

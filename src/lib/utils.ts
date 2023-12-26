@@ -5,6 +5,14 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
+export type ServerMessage = {
+    type: 'error' | 'success' | 'warning',
+    message: string,
+    title?: string | undefined,
+    errors?: string | undefined
+}
+
+
 export const formatDateToLocal = (
     dateStr: Date | string,
     locale: string = 'en-US',

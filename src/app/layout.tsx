@@ -2,13 +2,14 @@ import type {Metadata} from 'next'
 import './globals.css'
 import {ClerkProvider} from "@clerk/nextjs";
 import {ThemeProvider} from "@/app/ThemeProvider";
-import {webPageName} from "@/lib/constants/Constants";
 import {inter} from "@/app/ui/fonts";
 import {Toaster} from "@/components/ui/toaster";
+import {webPageName} from "@/lib/constants/Constants";
 
 
 export const metadata: Metadata = {
-    title: `${webPageName}`,
+    title:
+        {template: `%s | ${webPageName}`, default: webPageName},
     description: 'Our Culture, our pride',
 }
 

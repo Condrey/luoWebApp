@@ -1,8 +1,6 @@
 'use server'
 import {auth} from "@clerk/nextjs";
 import prisma from "@/lib/db/prisma";
-import {revalidatePath} from "next/cache";
-import {redirect} from "next/navigation";
 import {
     CreateQuotationSchema,
     createQuotationSchema,
@@ -10,9 +8,10 @@ import {
     updateQuotationSchema
 } from "@/lib/db/validation/quotation";
 import {Quotations} from ".prisma/client";
+import {ServerMessage} from "@/lib/utils";
 
 
-export async function createQuotation(formData: CreateQuotationSchema) {
+export async function createQuotation(formData: CreateQuotationSchema): Promise<ServerMessage> {
     console.log('submitting: ', formData)
     //Validate form fields using Zod
     const parseResult = createQuotationSchema.safeParse(formData)
@@ -20,7 +19,8 @@ export async function createQuotation(formData: CreateQuotationSchema) {
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
-            errors: parseResult.error.flatten().fieldErrors,
+            errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
+            type: 'error',
             message: 'Missing fields. Failed to create quotation.',
         }
     }
@@ -35,6 +35,7 @@ export async function createQuotation(formData: CreateQuotationSchema) {
         console.error("Not authorized")
         return {
             message: 'You are unauthorized to perform this action.',
+            type: 'warning'
         }
     }
     // Insert data into the database
@@ -51,30 +52,34 @@ export async function createQuotation(formData: CreateQuotationSchema) {
         //If a database error occurs, return a more specific error.
         console.error(e)
         return {
-            message: 'Database error: Failed to add quotation.'
+            message: 'Database error: Failed to add quotation.', type: 'error'
         }
 
     }
     // Revalidate the cache for quotations page and redirect the user
-    revalidatePath('/grievances/quotations')
-    redirect('/grievances/quotations')
+    return {
+        message: 'Your quotation has been created.',
+        type: 'success', title: 'Done.!'
+    }
 }
 
-export async function updateQuotation(formData: CreateQuotationSchema) {
+export async function updateQuotation(formData: CreateQuotationSchema): Promise<ServerMessage> {
 
     const parseResult = updateQuotationSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
-            errors: parseResult.error.flatten().fieldErrors,
+            errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             message: 'Missing fields. Failed to update quotation.',
+            title: 'Hold on',
+            type: 'warning'
         }
     }
 
     const {title, content, occupation, id} = parseResult.data
     const quotation = await prisma.quotations.findUnique({where: {id}})
     if (!quotation) {
-        return {message: 'Quotation not found'}
+        return {message: 'Quotation not found', type: 'error', title: '404'}
     }
 
     'use server'
@@ -82,7 +87,7 @@ export async function updateQuotation(formData: CreateQuotationSchema) {
     if (!userId || userId !== quotation.authorId) {
         console.error("Not authorized")
         return {
-            message: 'User not authorized to perform action'
+            message: 'User not authorized to perform action', title: 'Sorry', type: 'error'
         }
     }
 
@@ -98,27 +103,31 @@ export async function updateQuotation(formData: CreateQuotationSchema) {
 
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Update Quotation.'};
+        return {message: 'Database Error: Failed to Update Quotation.', type: "error"};
     }
-    revalidatePath('/grievances/quotations')
-    redirect('/grievances/quotations')
+    return {
+        message: 'The action completed successfully.',
+        title: "It's updated.!",
+        type: 'success'
+    }
 }
 
-export async function deleteQuotation(formData: Quotations) {
+export async function deleteQuotation(formData: Quotations): Promise<ServerMessage> {
 
     const parseResult = deleteQuotationSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
-            errors: parseResult.error.flatten().fieldErrors,
+            errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             message: 'Missing fields. Failed to delete quotation.',
+            type: 'error'
         }
     }
     const {id} = parseResult.data
     const quotation = await prisma.quotations.findUnique({where: {id}})
     if (!quotation) {
         return {
-            message: 'Quotation not found'
+            message: 'Quotation not found', type: 'error', title: '404'
         }
     }
 
@@ -127,15 +136,14 @@ export async function deleteQuotation(formData: Quotations) {
     if (!userId || userId !== quotation.authorId) {
         console.error("Not authorized")
         return {
-            message: 'User not authorized to perform action'
+            message: 'User not authorized to perform action', type: 'error', title: 'Tread softly.!'
         }
     }
     try {
         await prisma.quotations.delete({where: {id}})
-        revalidatePath('/grievances/quotations')
-        return {message: "Quotation deleted.!"}
+        return {message: "Quotation deleted.!", type: 'success', title: 'Done deal'}
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Delete Quotation.'};
+        return {message: 'Database Error: Failed to Delete Quotation.', type: "error"};
     }
 }

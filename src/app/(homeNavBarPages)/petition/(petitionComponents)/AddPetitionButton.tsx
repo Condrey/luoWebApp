@@ -8,7 +8,7 @@ export default async function AddPetitionButton() {
     const isUserSignedPetition = await hasUserSignedPetition()
     return <div>
         {
-            isUserSignedPetition ?
+            !isUserSignedPetition ?
                 <Badge className='py-2 font-bold'><CheckCheckIcon className='mr-1'/>You already Signed, thank
                     you.</Badge>
                 : <PetitionButton/>}

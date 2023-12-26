@@ -2,6 +2,8 @@ import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {ArrowRight} from "lucide-react";
 import AddPetitionButton from "@/app/(homeNavBarPages)/petition/(petitionComponents)/AddPetitionButton";
+import {Suspense} from "react";
+import {Skeleton} from "@/components/ui/skeleton";
 
 export default function PetitionGrievanceButtons({pathName}: { pathName?: string }) {
 
@@ -21,7 +23,8 @@ export default function PetitionGrievanceButtons({pathName}: { pathName?: string
                 </Link>
             </Button>
             {
-                pathName?.startsWith('/petition') ? <div><AddPetitionButton/></div> :
+                pathName?.startsWith('/petition') ? <> <Suspense
+                        fallback={<Skeleton className='w-full h-12 rounded-xl'/>}><AddPetitionButton/></Suspense></> :
                     <Button className='max-w-prose grow' variant='destructive' asChild>
                         <Link href='/petition'>
                             SIGN THE PETITION

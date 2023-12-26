@@ -1,17 +1,16 @@
 'use server'
 import {auth} from "@clerk/nextjs";
 import prisma from "@/lib/db/prisma";
-import {revalidatePath} from "next/cache";
-import {redirect} from "next/navigation";
 import {
     createPetitionSchema,
     CreatePetitionSchema,
     deletePetitionSchema,
     updatePetitionSchema
 } from "@/lib/db/validation/petition";
+import {ServerMessage} from "@/lib/utils";
 
 
-export async function createPetition(formData: CreatePetitionSchema) {
+export async function createPetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
     console.log('submitting: ', formData)
     //Validate form fields using Zod
     const parseResult = createPetitionSchema.safeParse(formData)
@@ -19,7 +18,8 @@ export async function createPetition(formData: CreatePetitionSchema) {
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
-            errors: parseResult.error.flatten().fieldErrors,
+            errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
+            type: 'error',
             message: 'Missing fields. Failed to create petition.',
         }
     }
@@ -33,7 +33,8 @@ export async function createPetition(formData: CreatePetitionSchema) {
     if (!userId) {
         console.error("Not authorized")
         return {
-            message: 'You are unauthorized to perform this action.',
+            type: "warning",
+            message: 'You are unauthorized to perform this action.'
         }
     }
     // Insert data into the database
@@ -50,22 +51,28 @@ export async function createPetition(formData: CreatePetitionSchema) {
         //If a database error occurs, return a more specific error.
         console.error(e)
         return {
+            type: 'error',
             message: 'Database error: Failed to sign petition.'
         }
 
     }
-    // Revalidate the cache for petitions page and redirect the user
-    revalidatePath('/petition')
-    redirect('/petition')
+
+
+    return {
+        type: 'success',
+        title: 'Hooray.!',
+        message: 'Successfully created Petition'
+    }
 }
 
-export async function updatePetition(formData: CreatePetitionSchema) {
+export async function updatePetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
 
     const parseResult = updatePetitionSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
-            errors: parseResult.error.flatten().fieldErrors,
+            errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
+            type: 'error',
             message: 'Missing fields. Failed to update petition.',
         }
     }
@@ -73,7 +80,7 @@ export async function updatePetition(formData: CreatePetitionSchema) {
     const {district, showDetails, id} = parseResult.data
     const petition = await prisma.petition.findUnique({where: {id}})
     if (!petition) {
-        return {message: 'Quotation not found'}
+        return {message: 'Quotation not found', type: 'error', title: '404'}
     }
 
     'use server'
@@ -81,7 +88,7 @@ export async function updatePetition(formData: CreatePetitionSchema) {
     if (!userId || userId !== petition.userId) {
         console.error("Not authorized")
         return {
-            message: 'User not authorized to perform action'
+            message: 'User not authorized to perform action', type: 'warning'
         }
     }
 
@@ -96,19 +103,23 @@ export async function updatePetition(formData: CreatePetitionSchema) {
 
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Update Petition.'};
+        return {message: 'Database Error: Failed to Update Petition.', type: 'error'};
     }
-    revalidatePath('/petition')
-    redirect('/petition')
+    return {
+        type: 'success',
+        title: 'Done.!',
+        message: 'Successfully edited Petition'
+    }
 }
 
-export async function deletePetition(formData: CreatePetitionSchema) {
+export async function deletePetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
 
     const parseResult = deletePetitionSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
-            errors: parseResult.error.flatten().fieldErrors,
+            errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
+            type: 'error',
             message: 'Missing fields. Failed to delete petition.',
         }
     }
@@ -116,7 +127,8 @@ export async function deletePetition(formData: CreatePetitionSchema) {
     const petition = await prisma.petition.findUnique({where: {id}})
     if (!petition) {
         return {
-            message: 'Petition not found'
+            message: 'Petition not found',
+            type: 'error'
         }
     }
 
@@ -125,15 +137,15 @@ export async function deletePetition(formData: CreatePetitionSchema) {
     if (!userId || userId !== petition.userId) {
         console.error("Not authorized")
         return {
-            message: 'User not authorized to perform action'
+            message: 'User not authorized to perform action',
+            type: 'warning',
         }
     }
     try {
         await prisma.petition.delete({where: {id}})
-        revalidatePath('/petition')
-        return {message: "Petition deleted.!"}
+        return {message: "Petition deleted.!", type: 'success', title: 'Success.!'}
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Delete Petition.'};
+        return {message: 'Database Error: Failed to Delete Petition.', type: 'error'};
     }
 }
