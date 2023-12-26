@@ -1,46 +1,39 @@
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import LoadingButton from "@/components/ui/loading-button";
-import {Petition} from ".prisma/client";
 import {useState} from "react";
-import {createPetitionSchema, CreatePetitionSchema} from "@/lib/db/validation/petition";
-import {Checkbox} from "@/components/ui/checkbox";
 import {toast} from "@/components/ui/use-toast";
 import {useRouter} from "next/navigation";
-import {createPetition, deletePetition, updatePetition} from "@/lib/db/actions/petition-action";
 import {ServerMessage} from "@/lib/utils";
+import {createTopicSchema, CreateTopicSchema} from "@/lib/db/validation/topic";
+import {Topic} from "@prisma/client";
+import {createTopic, deleteTopic, updateTopic} from "@/lib/db/actions/topic-action";
+import {Textarea} from "@/components/ui/textarea";
 
 
-interface AddEditPetitionDialogProps {
+interface AddEditTopicDialogProps {
     open: boolean
     setOpen: (open: boolean) => void
-    petitionToEdit?: Petition
+    topicToEdit?: Topic
 }
 
-export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: AddEditPetitionDialogProps) {
+export default function AddEditTopicDialog({open, setOpen, topicToEdit}: AddEditTopicDialogProps) {
     const router = useRouter()
     const [deleteInProgress, setDeleteInProgress] = useState(false)
-    const form = useForm<CreatePetitionSchema>({
-        resolver: zodResolver(createPetitionSchema),
+    const form = useForm<CreateTopicSchema>({
+        resolver: zodResolver(createTopicSchema),
         defaultValues: {
-            district: petitionToEdit?.district || '',
-            showDetails: petitionToEdit?.showDetails || false,
+            title: topicToEdit?.title || '',
         }
     })
 
 
-    async function onSubmit(input: CreatePetitionSchema) {
+    async function onSubmit(input: CreateTopicSchema) {
         try {
-            if (petitionToEdit) {
-
-                // const response = await axios.put("/api/petition", JSON.stringify({id: petitionToEdit.id, ...input}));
-                // if (!response.data) {
-                //     throw Error("Status code: " + response.status)
-                // }
-                const response: ServerMessage = await updatePetition(input)
+            if (topicToEdit) {
+                const response: ServerMessage = await updateTopic(input)
                 toast({
                     title: response.title !,
                     description: (
@@ -52,11 +45,8 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
                 })
 
             } else {
-                // const response = await axios.post('/api/petition', JSON.stringify(input))
-                // if (!response.data) {
-                //     throw Error("Empty response data");
-                // }
-                const response: ServerMessage = await createPetition(input)
+
+                const response: ServerMessage = await createTopic(input)
                 toast({
                     title: response.title !,
                     description: (
@@ -83,15 +73,11 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
         }
     }
 
-    async function deleteThisPetition() {
-        if (!petitionToEdit) return
+    async function deleteThisTopic() {
+        if (!topicToEdit) return
         setDeleteInProgress(true)
         try {
-            // const response = await axios.delete(`/api/petition/${petitionToEdit.id}`)
-            // if (!response.data) {
-            //     throw Error("Empty response data");
-            // }
-            const response: ServerMessage = await deletePetition(petitionToEdit)
+            const response: ServerMessage = await deleteTopic(topicToEdit)
             toast({
                 title: response.title!,
                 description: (
@@ -124,58 +110,37 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
                 <DialogHeader>
                     <DialogTitle>
                         {
-                            petitionToEdit ? "Edit Petition" : "Add Petition"
+                            topicToEdit ? "Edit Topic" : "Add Topic"
                         }
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...form} >
                     <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-3"}>
                         <FormField
-                            name={"district"}
+                            name={"title"}
                             control={form.control}
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>District/ City:</FormLabel>
+                                    <FormLabel>Title:</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            placeholder={"Please enter your district/ city for easy querying..."} {...field}/>
+                                        <Textarea
+                                            placeholder={"Type discussion title..."} {...field}/>
                                     </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name={"showDetails"}
-                            control={form.control}
-                            render={({field}) => (
-                                <FormItem
-                                    className="peer-has-[:checked]:ring-indigo-500 flex flex-row items-start space-x-3 space-y-0 rounded-md  p-4">
-                                    <FormControl>
-                                        <Checkbox className='peer'
-                                                  checked={field.value}
-                                                  onCheckedChange={field.onChange}/>
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel className='cursor-pointer'>Show my details</FormLabel>
-                                        <FormDescription>Visitors of the page will
-                                            be able to view your name and image
-                                            only</FormDescription>
-                                    </div>
                                     <FormMessage/>
                                 </FormItem>
                             )}
                         />
                         <DialogFooter className='gap-1 sm:gap-0'>
                             {
-                                petitionToEdit && (
+                                topicToEdit && (
                                     <LoadingButton
                                         loading={deleteInProgress}
                                         variant='destructive'
                                         disabled={form.formState.isSubmitting}
-                                        onClick={deleteThisPetition}
+                                        onClick={deleteThisTopic}
                                         type='button'
                                     >
-                                        Delete Petition
+                                        Delete Title
                                     </LoadingButton>
                                 )
                             }

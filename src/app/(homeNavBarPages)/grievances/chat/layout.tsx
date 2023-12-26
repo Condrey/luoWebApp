@@ -1,8 +1,9 @@
 import Breadcrumbs from "@/components/ui/bread-crumb";
 import {Button, buttonVariants} from "@/components/ui/button";
-import {FlameIcon, MessageCircle, PlusIcon, RadarIcon, StarsIcon} from "lucide-react";
+import {FlameIcon, MessageCircle, RadarIcon, StarsIcon} from "lucide-react";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
+import AddTopicButton from "@/app/(homeNavBarPages)/grievances/chat/AddTopicButton";
 
 export default function Layout({children}: { children: React.ReactNode }) {
     return (
@@ -14,7 +15,7 @@ export default function Layout({children}: { children: React.ReactNode }) {
             <div
                 className=' bg-gradient-to-r from-blue-400 to-fuchsia-400 text-slate-800 justify-between rounded-t h-[56px] items-center flex px-3'>
                 <span className='md:text-2xl'>All topics</span>
-                <Button><PlusIcon/>Topic</Button>
+                <AddTopicButton/>
             </div>
             <div className="flex h-full flex-col md:flex-row md:overflow-hidden border-fuchsia-400 border-2">
                 <div

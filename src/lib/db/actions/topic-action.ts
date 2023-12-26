@@ -1,30 +1,24 @@
 'use server'
 import {auth} from "@clerk/nextjs";
 import prisma from "@/lib/db/prisma";
-import {
-    createPetitionSchema,
-    CreatePetitionSchema,
-    deletePetitionSchema,
-    updatePetitionSchema
-} from "@/lib/db/validation/petition";
 import {ServerMessage} from "@/lib/utils";
+import {createTopicSchema, CreateTopicSchema, deleteTopicSchema, updateTopicSchema} from "@/lib/db/validation/topic";
 
 
-export async function createPetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
-    console.log('submitting: ', formData)
+export async function createTopic(formData: CreateTopicSchema): Promise<ServerMessage> {
     //Validate form fields using Zod
-    const parseResult = createPetitionSchema.safeParse(formData)
+    const parseResult = createTopicSchema.safeParse(formData)
     //If form validation occurs, return errors early, otherwise, proceed.
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
             errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             type: 'error',
-            message: 'Missing fields. Failed to create petition.',
+            message: 'Missing fields. Failed to create topic.',
         }
     }
 //Prepare data for insertion into the database
-    const {district, showDetails} = parseResult.data
+    const {title} = parseResult.data
 
     'use server'
     const {userId} = auth()
@@ -39,11 +33,10 @@ export async function createPetition(formData: CreatePetitionSchema): Promise<Se
     }
     // Insert data into the database
     try {
-        await prisma.petition.create({
+        await prisma.topic.create({
             data: {
-                district,
-                showDetails,
-                userId
+                title,
+                authorId: userId
             }
         })
 
@@ -52,7 +45,7 @@ export async function createPetition(formData: CreatePetitionSchema): Promise<Se
         console.error(e)
         return {
             type: 'error',
-            message: 'Database error: Failed to sign petition.'
+            message: 'Database error: Failed to add topic.'
         }
 
     }
@@ -61,31 +54,31 @@ export async function createPetition(formData: CreatePetitionSchema): Promise<Se
     return {
         type: 'success',
         title: 'Hooray.!',
-        message: 'Successfully created Petition'
+        message: 'Successfully created topic for discussion'
     }
 }
 
-export async function updatePetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
+export async function updateTopic(formData: CreateTopicSchema): Promise<ServerMessage> {
 
-    const parseResult = updatePetitionSchema.safeParse(formData)
+    const parseResult = updateTopicSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
             errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             type: 'error',
-            message: 'Missing fields. Failed to update petition.',
+            message: 'Missing fields. Failed to update topic.',
         }
     }
 
-    const {district, showDetails, id} = parseResult.data
-    const petition = await prisma.petition.findUnique({where: {id}})
-    if (!petition) {
-        return {message: 'Petition not found', type: 'error', title: '404'}
+    const {title, id} = parseResult.data
+    const topic = await prisma.topic.findUnique({where: {id}})
+    if (!topic) {
+        return {message: 'Topic not found', type: 'error', title: '404'}
     }
 
     'use server'
     const {userId} = auth()
-    if (!userId || userId !== petition.userId) {
+    if (!userId || userId !== topic.authorId) {
         console.error("Not authorized")
         return {
             message: 'User not authorized to perform action', type: 'warning'
@@ -93,48 +86,47 @@ export async function updatePetition(formData: CreatePetitionSchema): Promise<Se
     }
 
     try {
-        await prisma.petition.update({
+        await prisma.topic.update({
             where: {id},
             data: {
-                district,
-                showDetails,
+                title,
             }
         })
 
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Update Petition.', type: 'error'};
+        return {message: 'Database Error: Failed to Update Topic.', type: 'error'};
     }
     return {
         type: 'success',
         title: 'Done.!',
-        message: 'Successfully edited Petition'
+        message: 'Successfully edited Topic'
     }
 }
 
-export async function deletePetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
+export async function deleteTopic(formData: CreateTopicSchema): Promise<ServerMessage> {
 
-    const parseResult = deletePetitionSchema.safeParse(formData)
+    const parseResult = deleteTopicSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
             errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             type: 'error',
-            message: 'Missing fields. Failed to delete petition.',
+            message: 'Missing fields. Failed to delete topic.',
         }
     }
     const {id} = parseResult.data
-    const petition = await prisma.petition.findUnique({where: {id}})
-    if (!petition) {
+    const topic = await prisma.topic.findUnique({where: {id}})
+    if (!topic) {
         return {
-            message: 'Petition not found',
+            message: 'Topic not found',
             type: 'error'
         }
     }
 
     'use server'
     const {userId} = auth()
-    if (!userId || userId !== petition.userId) {
+    if (!userId || userId !== topic.authorId) {
         console.error("Not authorized")
         return {
             message: 'User not authorized to perform action',
@@ -142,10 +134,10 @@ export async function deletePetition(formData: CreatePetitionSchema): Promise<Se
         }
     }
     try {
-        await prisma.petition.delete({where: {id}})
-        return {message: "Petition deleted.!", type: 'success', title: 'Success.!'}
+        await prisma.topic.delete({where: {id}})
+        return {message: "Topic deleted.!", type: 'success', title: 'Success.!'}
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Delete Petition.', type: 'error'};
+        return {message: 'Database Error: Failed to Delete Topic.', type: 'error'};
     }
 }
