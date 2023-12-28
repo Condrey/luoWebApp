@@ -5,6 +5,7 @@ import {
     CreateQuotationSchema,
     createQuotationSchema,
     deleteQuotationSchema,
+    UpdateQuotationSchema,
     updateQuotationSchema
 } from "@/lib/db/validation/quotation";
 import {Quotations} from ".prisma/client";
@@ -63,7 +64,7 @@ export async function createQuotation(formData: CreateQuotationSchema): Promise<
     }
 }
 
-export async function updateQuotation(formData: CreateQuotationSchema): Promise<ServerMessage> {
+export async function updateQuotation(formData: UpdateQuotationSchema): Promise<ServerMessage> {
 
     const parseResult = updateQuotationSchema.safeParse(formData)
     if (!parseResult.success) {

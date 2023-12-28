@@ -3,28 +3,29 @@ import {auth} from "@clerk/nextjs";
 import prisma from "@/lib/db/prisma";
 import {ServerMessage} from "@/lib/utils";
 import {
-    createTopicSchema,
-    CreateTopicSchema,
-    deleteTopicSchema,
-    UpdateTopicSchema,
-    updateTopicSchema
+    createCommentSchema,
+    CreateCommentSchema,
+    deleteCommentSchema,
+    updateCommentSchema,
+    UpdateCommentSchema
 } from "@/lib/db/validation/topic";
+import {TopicComment} from "@prisma/client";
 
 
-export async function createTopic(formData: CreateTopicSchema): Promise<ServerMessage> {
+export async function createComment(formData: CreateCommentSchema): Promise<ServerMessage> {
     //Validate form fields using Zod
-    const parseResult = createTopicSchema.safeParse(formData)
+    const parseResult = createCommentSchema.safeParse(formData)
     //If form validation occurs, return errors early, otherwise, proceed.
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
             errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             type: 'error',
-            message: 'Missing fields. Failed to create topic.',
+            message: 'Missing fields. Failed to create comment.',
         }
     }
 //Prepare data for insertion into the database
-    const {title} = parseResult.data
+    const {comment, topicId} = parseResult.data
 
     'use server'
     const {userId} = auth()
@@ -39,10 +40,11 @@ export async function createTopic(formData: CreateTopicSchema): Promise<ServerMe
     }
     // Insert data into the database
     try {
-        await prisma.topic.create({
+        await prisma.topicComment.create({
             data: {
-                title,
-                authorId: userId
+                comment,
+                authorId: userId,
+                topicId
             }
         })
 
@@ -51,7 +53,7 @@ export async function createTopic(formData: CreateTopicSchema): Promise<ServerMe
         console.error(e)
         return {
             type: 'error',
-            message: 'Database error: Failed to add topic.'
+            message: 'Database error: Failed to add comment.'
         }
 
     }
@@ -60,32 +62,31 @@ export async function createTopic(formData: CreateTopicSchema): Promise<ServerMe
     return {
         type: 'success',
         title: 'Hooray.!',
-        message: 'Successfully created topic for discussion'
+        message: 'Successfully submitted your comment for this discussion'
     }
 }
 
-export async function updateTopic(formData: UpdateTopicSchema): Promise<ServerMessage> {
+export async function updateComment(formData: UpdateCommentSchema): Promise<ServerMessage> {
 
-    const parseResult = updateTopicSchema.safeParse(formData)
+    const parseResult = updateCommentSchema.safeParse(formData)
     if (!parseResult.success) {
-        console.error("Form Data:", formData)
         console.error(parseResult.error)
         return {
             errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             type: 'error',
-            message: 'Missing fields. Failed to update topic.',
+            message: 'Missing fields. Failed to update comment.',
         }
     }
 
-    const {title, id} = parseResult.data
-    const topic = await prisma.topic.findUnique({where: {id}})
-    if (!topic) {
-        return {message: 'Topic not found', type: 'error', title: '404'}
+    const {comment, topicId, id} = parseResult.data
+    const topicComment = await prisma.topicComment.findUnique({where: {id}})
+    if (!topicComment) {
+        return {message: 'Comment not found', type: 'error', title: '404'}
     }
 
     'use server'
     const {userId} = auth()
-    if (!userId || userId !== topic.authorId) {
+    if (!userId || userId !== topicComment.authorId) {
         console.error("Not authorized")
         return {
             message: 'User not authorized to perform action', type: 'warning'
@@ -93,46 +94,47 @@ export async function updateTopic(formData: UpdateTopicSchema): Promise<ServerMe
     }
 
     try {
-        await prisma.topic.update({
+        await prisma.topicComment.update({
             where: {id},
             data: {
-                title,
+                comment,
+                topicId
             }
         })
 
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Update Topic.', type: 'error'};
+        return {message: 'Database Error: Failed to Update Comment.', type: 'error'};
     }
     return {
         type: 'success',
         title: 'Done.!',
-        message: 'Successfully edited Topic'
+        message: 'Successfully edited Comment'
     }
 }
 
-export async function deleteTopic(formData: CreateTopicSchema): Promise<ServerMessage> {
-    const parseResult = deleteTopicSchema.safeParse(formData)
+export async function deleteComment(formData: TopicComment): Promise<ServerMessage> {
+    const parseResult = deleteCommentSchema.safeParse(formData)
     if (!parseResult.success) {
         console.error(parseResult.error)
         return {
             errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
             type: 'error',
-            message: 'Missing fields. Failed to delete topic.',
+            message: 'Missing fields. Failed to delete comment.',
         }
     }
     const {id} = parseResult.data
-    const topic = await prisma.topic.findUnique({where: {id}})
-    if (!topic) {
+    const topicComment = await prisma.topicComment.findUnique({where: {id}})
+    if (!topicComment) {
         return {
-            message: 'Topic not found',
+            message: 'Comment not found',
             type: 'error'
         }
     }
 
     'use server'
     const {userId} = auth()
-    if (!userId || userId !== topic.authorId) {
+    if (!userId || userId !== topicComment.authorId) {
         console.error("Not authorized")
         return {
             message: 'User not authorized to perform action',
@@ -140,10 +142,10 @@ export async function deleteTopic(formData: CreateTopicSchema): Promise<ServerMe
         }
     }
     try {
-        await prisma.topic.delete({where: {id}})
-        return {message: "Topic deleted.!", type: 'success', title: 'Success.!'}
+        await prisma.topicComment.delete({where: {id}})
+        return {message: "Comment deleted.!", type: 'success', title: 'Success.!'}
     } catch (e) {
         console.error(e)
-        return {message: 'Database Error: Failed to Delete Topic.', type: 'error'};
+        return {message: 'Database Error: Failed to Delete Comment.', type: 'error'};
     }
 }

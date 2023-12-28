@@ -102,19 +102,21 @@ export async function populateCounter() {
         const videosCountPromise = prisma.videoGallery.count()
         const playlistCountPromise = prisma.videoGalleryDescription.count()
         const chatCountPromise = prisma.topic.count()
+        const quotationCountPromise = prisma.quotations.count()
 
         const data = await Promise.all([
-            petitionCountPromise, videosCountPromise, playlistCountPromise, chatCountPromise
+            petitionCountPromise, videosCountPromise, playlistCountPromise, chatCountPromise, quotationCountPromise
         ])
         const numberOfPetitions = Number(data[0] ?? '0')
         const numberOfVideos = Number(data[1] ?? '0')
         const numberOfPlaylists = Number(data[2] ?? '0')
         const numberOfTopics = Number(data[3] ?? '0')
+        const numberOfQuotes = Number(data[4] ?? '0')
         return {
             numberOfPetitions,
             numberOfVideos,
             numberOfPlaylists,
-            numberOfTopics
+            numberOfTopics, numberOfQuotes
         }
     } catch (e) {
         console.error('Error determining request:', e)

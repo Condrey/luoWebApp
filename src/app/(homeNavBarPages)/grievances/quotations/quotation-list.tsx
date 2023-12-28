@@ -13,11 +13,11 @@ export default async function QuotationList() {
                          className='flex flex-col justify-center items-center aspect-video md:aspect-square gap-6 dark:bg-accent bg-fuchsia-300/30 p-3 rounded-md'>
                         <div className='flex flex-col justify-center items-center gap-2'>
                             <Avatar className='w-[100px] h-[100px]'>
-                                <AvatarImage src={quotation.user.imageUrl}/>
+                                <AvatarImage src={quotation.imageUrl}/>
                                 <AvatarFallback
-                                    className='uppercase'>{quotation.user.firstName?.substring(0, 1)}</AvatarFallback>
+                                    className='uppercase'>{quotation.userName.substring(0, 1)}</AvatarFallback>
                             </Avatar>
-                            <span>{`${quotation.user.firstName} ${quotation.user.lastName}`}</span>
+                            <span>{quotation.userName}</span>
                             <span>{quotation.occupation}</span>
                         </div>
                         <div className='flex flex-col justify-center items-center gap-2'>

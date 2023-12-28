@@ -6,6 +6,7 @@ export const createPetitionSchema = z.object(({
 }))
 
 export type CreatePetitionSchema = z.infer<typeof createPetitionSchema>
+export type UpdatePetitionSchema = z.infer<typeof updatePetitionSchema>
 
 export const updatePetitionSchema = createPetitionSchema.extend(({
     id: z.string().min(1)

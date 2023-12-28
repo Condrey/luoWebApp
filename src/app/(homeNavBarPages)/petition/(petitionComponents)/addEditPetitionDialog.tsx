@@ -40,7 +40,7 @@ export default function AddEditPetitionDialog({open, setOpen, petitionToEdit}: A
                 // if (!response.data) {
                 //     throw Error("Status code: " + response.status)
                 // }
-                const response: ServerMessage = await updatePetition(input)
+                const response: ServerMessage = await updatePetition({...input, id: petitionToEdit.id})
                 toast({
                     title: response.title !,
                     description: (

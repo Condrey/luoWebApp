@@ -1,15 +1,23 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {populateCounter} from "@/lib/db/data/petition-data";
 import {Skeleton} from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export default async function PetitionGrievanceCounter() {
-    const {numberOfPetitions, numberOfPlaylists, numberOfTopics, numberOfVideos} = await populateCounter()
+    const {
+        numberOfPetitions,
+        numberOfPlaylists,
+        numberOfTopics,
+        numberOfVideos,
+        numberOfQuotes
+    } = await populateCounter()
 
 
     return <div className='flex flex-col gap-6'>
         <span className='text-balance text-2xl font-bold text-center'>Current Standing</span>
         <div className='flex flex-row gap-2 px-2 items-center justify-center'>
-            <Card className='flex flex-col-reverse md:flex-col border-2  px-2 md:px-5'>
+            <Link href='/grievances'
+                  className='flex flex-col-reverse bg-card hover:bg-accent rounded-md md:flex-col border-2  px-2 md:px-5'>
                 <CardHeader className='flex flex-col md:flex-row items-center justify-center gap-3 py-2'>
                     <div className='flex flex-col justify-center items-center gap-2'>
                         <CardTitle>{numberOfPlaylists.toLocaleString()}</CardTitle>
@@ -23,16 +31,19 @@ export default async function PetitionGrievanceCounter() {
                         <CardTitle>{numberOfTopics.toLocaleString()}</CardTitle>
                         <CardDescription>Topics</CardDescription>
                     </div>
+                    <div className='flex flex-col justify-center items-center gap-2'>
+                        <CardTitle>{numberOfQuotes.toLocaleString()}</CardTitle>
+                        <CardDescription>Quotes</CardDescription>
+                    </div>
                 </CardHeader>
                 <CardHeader className='flex flex-col items-center'>
                     <CardTitle>Grievances</CardTitle>
                 </CardHeader>
 
 
-            </Card>
+            </Link>
 
-            <Card
-                className='border-2  px-2 md:px-5'>
+            <Link href='/petition' className='border-2 rounded-md bg-card hover:bg-accent px-2 md:px-5'>
                 <CardHeader className='flex flex-col items-center'>
                     <CardTitle>{numberOfPetitions.toLocaleString()} </CardTitle>
                     <CardDescription>Signatures</CardDescription>
@@ -40,7 +51,7 @@ export default async function PetitionGrievanceCounter() {
                 <CardContent className='flex flex-col items-center'>
                     <CardTitle>Petitions</CardTitle>
                 </CardContent>
-            </Card>
+            </Link>
         </div>
     </div>
 }

@@ -9,7 +9,7 @@ export default function Home() {
     const {userId} = auth()
     // if (userId) redirect("/notes")
     return (
-        <main className="flex min-h-screen flex-col">
+        <main className="flex min-h-screen flex-col gap-12 pb-12">
             <HomeNavBar/>
             <BannerSection/>
             <CommentSection/>

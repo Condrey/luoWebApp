@@ -14,10 +14,12 @@ import Link from "next/link";
 import Image from "next/image";
 import {buttonVariants} from "@/components/ui/button";
 import featureImage from '@/assets/akii_bua-desktop.jpg'
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {Avatar, AvatarImage} from "@/components/ui/avatar";
 import Breadcrumbs from "@/components/ui/bread-crumb";
 import {populateGrievancesCounter} from "@/lib/db/data/grievances-data";
+import {Quotations} from ".prisma/client";
+import RecentDiscussions, {RecentDiscussionsSkeleton} from "@/app/(homeNavBarPages)/grievances/recent-discussions";
+import {Suspense} from "react";
+import {cn} from "@/lib/utils";
 
 const GrievancesPage = async () => {
     const {
@@ -25,24 +27,28 @@ const GrievancesPage = async () => {
         numberOfTopics,
         numberOfPlaylists,
         numberOfVideos,
-        numberOfTopicReplies
+        numberOfTopicReplies,
+        favoriteQuote
     } = await populateGrievancesCounter()
-    return <main className="flex min-h-screen flex-col gap-6">
+    return <main className="flex min-h-dvh flex-col gap-12 items-center p-4">
         <Breadcrumbs breadcrumbs={[
             {label: 'Grievances', href: '/grievances', active: true}
         ]}/>
-        <div id='first section' className='grid md:grid-cols-2 xl:grid-cols-3 grid-cols-1 gap-3'>
+        <div id='first section'
+             className='max-w-prose  grid md:grid-cols-2 xl:grid-cols-3 grid-cols-1 gap-3'>
             <GalleryCard noOfPlaylists={numberOfPlaylists} noOfVideos={numberOfVideos}/>
             <ChatCard noOfDiscussions={numberOfTopics} noOfReplies={numberOfTopicReplies}/>
             <QuoteCard noOfQuotes={numberOfQuotes}/>
         </div>
-        <PopularQuoteTag/>
-        <div className='flex flex-col md:flex-row gap-3'>
+        <PopularQuoteTag quotation={favoriteQuote!} userName={favoriteQuote.userName}/>
+        <div className='flex flex-col md:flex-row gap-6 md:gap-12'>
             <div className='flex flex-col w-full xl:w-2/3'>
                 <SpotlightCard noOfStories={200} noOfInterviews={100}/>
             </div>
-            <div className='flex flex-col w-full xl:w-1/3'>
-                <RecentDiscussionsCard/>
+            <div className='flex flex-col w-full xl:w-1/3 items-stretch'>
+                <Suspense fallback={<RecentDiscussionsSkeleton/>}>
+                    <RecentDiscussions/>
+                </Suspense>
             </div>
         </div>
     </main>
@@ -57,7 +63,8 @@ export const metadata = {
 function GalleryCard({noOfVideos, noOfPlaylists}: {
     noOfVideos: string, noOfPlaylists: string
 }) {
-    return <Card className='inline-flex flex-col items-center hover:shadow-2xl cursor-pointer'>
+    return <Card
+        className='inline-flex flex-col dark:bg-accent hover:bg-accent/50 items-center hover:shadow-2xl cursor-pointer'>
         <Link href='/grievances/video-gallery/playlist' className='inline-flex flex-col items-center  w-full h-full'>
 
             <CardHeader>
@@ -67,12 +74,12 @@ function GalleryCard({noOfVideos, noOfPlaylists}: {
                 </CardTitle> </CardHeader>
             <CardContent className='flex flex-wrap gap-2 justify-center'>
                 <Link href='/grievances/video-gallery/videos'
-                      className='flex  items-center border border-slate-800  dark:border-accent cursor-pointer rounded-md p-3 gap-3 bg-accent hover:bg-slate-900 hover:text-slate-50 text-accent-foreground'>
+                      className={cn('flex items-center gap-1', buttonVariants())}>
                     <span className='flex gap-1'><FileVideo/>Videos</span>
                     <span>{noOfVideos.toLocaleString()}</span>
                 </Link>
                 <Link href='/grievances/video-gallery/playlist'
-                      className=' flex  items-center border border-destructive  rounded-md p-3 gap-3 bg-destructive hover:bg-red-700 cursor-pointer text-destructive-foreground'>
+                      className={cn('flex items-center gap-1', buttonVariants({variant: 'destructive'}))}>
                     <span className='flex gap-1'><ListVideoIcon/>Playlists</span>
                     <span>{noOfPlaylists.toLocaleString()}</span>
                 </Link>
@@ -82,7 +89,8 @@ function GalleryCard({noOfVideos, noOfPlaylists}: {
 }
 
 function ChatCard({noOfDiscussions, noOfReplies}: { noOfDiscussions: string, noOfReplies: string }) {
-    return <Card className='inline-flex flex-col items-center hover:shadow-2xl cursor-pointer'>
+    return <Card
+        className='inline-flex dark:bg-accent hover:bg-accent/50 flex-col items-center hover:shadow-2xl cursor-pointer'>
         <Link href='/grievances/chat' className='inline-flex flex-col items-center  w-full h-full'>
             <CardHeader>
                 <CardTitle className='flex gap-1'>
@@ -98,7 +106,7 @@ function ChatCard({noOfDiscussions, noOfReplies}: { noOfDiscussions: string, noO
 }
 
 function QuoteCard({noOfQuotes}: { noOfQuotes: string }) {
-    return <Card className='hover:shadow-2xl cursor-pointer'>
+    return <Card className='hover:shadow-2xl dark:bg-accent hover:bg-accent/50 cursor-pointer'>
         <Link href='/grievances/quotations' className='inline-flex flex-col items-center  w-full h-full'>
             <CardHeader>
                 <CardTitle className='flex gap-1'>
@@ -113,23 +121,19 @@ function QuoteCard({noOfQuotes}: { noOfQuotes: string }) {
     </Card>
 }
 
-function PopularQuoteTag() {
+function PopularQuoteTag({quotation, userName}: { quotation: Quotations | null, userName: string }) {
 
-    const quotation = {
-        id: 'ldnlsknlkdnsknkl', quote: 'nlddnlksnlkndlksnlkndlsknlkndlknsldmlndlksnlknldknslknlkndlsk\n' +
-            '                dslknlkndlksnlknlkdnlsnlknlkds\n' +
-            '                dsknlknlknlknkdnlknlknds'
-    }
-    return <Link href={`/grievances/quotations/${quotation.id}`}
-                 className='bg-background p-3 rounded-md  hover:shadow-2xl cursor-pointer'>
+    return <Link href={`/grievances/quotations/${quotation!.id}`}
+                 className='border bg-card dark:bg-accent hover:bg-accent/50 text-accent-foreground
+                  max-w-prose  p-3 rounded-md  hover:shadow-2xl cursor-pointer'>
         <div className='float-left text-destructive font-bold pr-1'>
             <QuoteIcon/>
-            Popular Quote
+            Quote
         </div>
-        <p className='break-words text-clip whitespace-pre-line'>
-            {quotation.quote}
-
+        <p className='break-words text-clip whitespace-pre-line '>
+            {quotation!.content}
         </p>
+        <span className='text-xs'>{`${quotation!.title}-${userName}`}</span>
 
     </Link>
 }
@@ -149,15 +153,16 @@ function SpotlightCard({noOfStories, noOfInterviews}: { noOfStories: number, noO
             <div className='absolute inset-0 bg-gradient-to-b from-black/50 '></div>
             <div className='absolute inset-x-0 inset-y-2 flex  justify-center'>
                 <span className='flex gap-1 justify-center text-xl md:text-2xl xl:text-4xl uppercase '>
-                     <LightbulbIcon/>
+                     <LightbulbIcon size={48}/>
                     Spotlight
                 </span>
             </div>
 
-            <div className=' absolute inset-y-0 inset-x-0 flex p-3 gap-2 items-end justify-between'>
-                <span className='font-bold'>{spotlight.title}</span>
+            <div className=' absolute inset-y-0 inset-x-0 flex flex-wrap p-3 gap-2 items-end justify-between'>
+                <span
+                    className='font-bold bg-slate-900/30 backdrop-blur-2xl break-words  rounded px-2'>{spotlight.title}</span>
                 <Link href={`/grievances/spotlight/${spotlight.id}`}
-                      className={buttonVariants({variant: 'default'})}>
+                      className={cn('flex gap-1 items-center', buttonVariants({variant: 'default'}))}>
                     {`Review ${spotlight.category}`}
                     <ArrowRight className=''/>
                 </Link>
@@ -168,51 +173,20 @@ function SpotlightCard({noOfStories, noOfInterviews}: { noOfStories: number, noO
     function ButtonSection() {
         return <CardContent className='flex flex-wrap gap-2 justify-center p-3'>
             <Link href={'/grievances/spotlight/stories'}
-                  className='flex  items-center border border-slate-800  dark:border-accent cursor-pointer rounded-md  p-3 gap-3 bg-accent hover:bg-slate-900 hover:text-slate-50 text-accent-foreground'>
+                  className={cn('flex gap-1 items-center', buttonVariants({variant: 'default'}))}>
                 <span className='flex gap-1 font-bold'><LucideMic2/>Stories</span>
                 <span>{noOfStories}</span>
             </Link>
             <Link href={'/grievances/spotlight/interviews'}
-                  className=' flex  items-center border border-destructive rounded-md  p-3 gap-3 bg-destructive hover:bg-red-700 cursor-pointer text-destructive-foreground'>
+                  className={cn('flex gap-1 items-center', buttonVariants({variant: 'destructive'}))}>
                 <span className='flex gap-1 font-bold'><LucideMic/>Interviews</span>
                 <span>{noOfInterviews}</span>
             </Link>
         </CardContent>
     }
 
-    return <div className='flex flex-col gap-3 bg-background rounded-md  border'>
+    return <div className='flex flex-col gap-3 bg-card dark:bg-accent rounded-md  border'>
         <ImageSection/>
         <ButtonSection/>
-    </div>
-}
-
-function RecentDiscussionsCard() {
-    const discussions = [
-        {title: 'Initiative to mitigate', discussant: 'Hon Akena Obote', id: 'knclxnlknl'},
-        {title: 'We must fight for the legacy', discussant: 'Young Emma', id: 'dnlkndsn'},
-        {title: 'Uganda must style up', discussant: 'Susan Betty', id: 'kdnlsknlkds'},
-    ]
-
-    function DiscussionContainer() {
-        return <div>
-
-        </div>
-    }
-
-    return <div className='flex flex-col gap-3 bg-background h-full rounded-md p-3 border'>
-        <span className='text-xl md:text-2xl   flex justify-center'>Recent Discussions</span>
-        {
-            discussions.map((discussion) => (
-                <div key={discussion.id}>
-                    <Alert>
-                        <Avatar>
-                            <AvatarImage></AvatarImage>
-                        </Avatar>
-                        <AlertTitle>{discussion.title}</AlertTitle>
-                        <AlertDescription>-{discussion.discussant}</AlertDescription>
-                    </Alert>
-                </div>
-            ))
-        }
     </div>
 }

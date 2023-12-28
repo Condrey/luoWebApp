@@ -5,6 +5,7 @@ import {
     createPetitionSchema,
     CreatePetitionSchema,
     deletePetitionSchema,
+    UpdatePetitionSchema,
     updatePetitionSchema
 } from "@/lib/db/validation/petition";
 import {ServerMessage} from "@/lib/utils";
@@ -65,7 +66,7 @@ export async function createPetition(formData: CreatePetitionSchema): Promise<Se
     }
 }
 
-export async function updatePetition(formData: CreatePetitionSchema): Promise<ServerMessage> {
+export async function updatePetition(formData: UpdatePetitionSchema): Promise<ServerMessage> {
 
     const parseResult = updatePetitionSchema.safeParse(formData)
     if (!parseResult.success) {

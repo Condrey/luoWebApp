@@ -267,7 +267,7 @@ model TopicComment {
   comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Topic     Topic?   @relation(fields: [topicId], references: [id])
+  Topic     Topic?   @relation(fields: [topicId], references: [id], onDelete: Cascade)
   topicId   String?  @db.ObjectId
   authorId  String
   User      User?    @relation(fields: [userId], references: [id])
@@ -279,7 +279,7 @@ model TopicComment {
 model TopicLikeOrDisLike {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   likeOrDislike LikeOrDislike @default(DEFAULT)
-  topic         Topic         @relation(fields: [topicId], references: [id])
+  topic         Topic         @relation(fields: [topicId], references: [id], onDelete: Cascade)
   authorId      String
   topicId       String        @db.ObjectId
   User          User?         @relation(fields: [userId], references: [id])

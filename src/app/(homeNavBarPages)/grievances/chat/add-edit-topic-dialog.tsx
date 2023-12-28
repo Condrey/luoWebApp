@@ -33,7 +33,7 @@ export default function AddEditTopicDialog({open, setOpen, topicToEdit}: AddEdit
     async function onSubmit(input: CreateTopicSchema) {
         try {
             if (topicToEdit) {
-                const response: ServerMessage = await updateTopic(input)
+                const response: ServerMessage = await updateTopic({...input, id: topicToEdit.id})
                 toast({
                     title: response.title !,
                     description: (

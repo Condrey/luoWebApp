@@ -7,6 +7,7 @@ export const createQuotationSchema = z.object(({
 }))
 
 export type CreateQuotationSchema = z.infer<typeof createQuotationSchema>
+export type UpdateQuotationSchema = z.infer<typeof updateQuotationSchema>
 
 export const updateQuotationSchema = createQuotationSchema.extend(({
     id: z.string().min(1)

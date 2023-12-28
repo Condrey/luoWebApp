@@ -1,22 +1,18 @@
 import {fetchTopics} from "@/lib/db/data/topic-data";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {currentUser} from "@clerk/nextjs";
+import TopicContainer from "@/app/(homeNavBarPages)/grievances/chat/topic-container";
 
 export default async function Comments() {
+    const user = await currentUser()
     const topics = await fetchTopics()
-    return <div className='space-4'>
+    return <div className=' p-3 gap-3 flex flex-col'>
         {
-            topics.map((topic) => (
-                <div key={topic.id} className='border rounded-md p-3 flex gap-2 '>
-                    <Avatar>
-                        <AvatarImage src={topic.user.imageUrl}/>
-                        <AvatarFallback>{topic.user.firstName?.substring(0, 1)}</AvatarFallback>
-                    </Avatar>
-                    <div className='flex flex-col gap-1'>
-                        <span>{topic.title}</span>
-                        <span>{topic.createdUpdatedAtTimestamp}</span>
-                    </div>
-                </div>
-            ))
+            topics.map((topic) =>
+                <TopicContainer key={topic.id} topic={topic} userName={topic.userName} imageUrl={topic.imageUrl}
+                                createdUpdatedAtTimestamp={topic.createdUpdatedAtTimestamp} userId={user?.id}
+                                numberOfComments={topic.numberOfComments} numberOfDislikes={topic.numberOfDisLikes}
+                                numberOfLikes={topic.numberOfLikes}/>
+            )
         }
     </div>
 }

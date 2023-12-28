@@ -20,7 +20,7 @@ export default function NavLinks() {
     const router = useRouter()
     console.log('router is:', router)
     return (
-        <div className='flex flex-row md:flex-col'>
+        <>
             {links.map((link) => {
                 const LinkIcon = link.icon;
                 const href = link.href
@@ -33,12 +33,12 @@ export default function NavLinks() {
                               "flex  gap-2 ", buttonVariants({variant})
                           )}
                     >
-                        <LinkIcon className="w-6"/>
-                        <p className={cn("grow flex  ", !isActive && 'hidden md:block')}>{link.name}</p>
+                        <LinkIcon className="w-6 "/>
+                        <p className={cn("grow flex  ",)}>{link.name}</p>
                     </Link>
                 );
             })}
-        </div>
+        </>
     );
 }
 

@@ -1,45 +1,41 @@
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import LoadingButton from "@/components/ui/loading-button";
-import {Quotations} from ".prisma/client";
 import {useState} from "react";
 import {toast} from "@/components/ui/use-toast";
 import {useRouter} from "next/navigation";
-import {createQuotationSchema, CreateQuotationSchema} from "@/lib/db/validation/quotation";
-import {createQuotation, deleteQuotation, updateQuotation} from "@/lib/db/actions/quotation-action";
-import {Textarea} from "@/components/ui/textarea";
 import {ServerMessage} from "@/lib/utils";
+import {createCommentSchema, CreateCommentSchema} from "@/lib/db/validation/topic";
+import {TopicComment} from "@prisma/client";
+import {Textarea} from "@/components/ui/textarea";
+import {createComment, deleteComment, updateComment} from "@/lib/db/actions/comment-action";
 
 
-interface AddEditQuotationDialogProps {
+interface AddEditCommentDialogProps {
     open: boolean
     setOpen: (open: boolean) => void
-    quotationToEdit?: Quotations
+    commentToEdit: TopicComment
 }
 
-export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}: AddEditQuotationDialogProps) {
+export default function AddEditCommentDialog({open, setOpen, commentToEdit}: AddEditCommentDialogProps) {
     const router = useRouter()
     const [deleteInProgress, setDeleteInProgress] = useState(false)
-    const form = useForm<CreateQuotationSchema>({
-        resolver: zodResolver(createQuotationSchema),
+    const form = useForm<CreateCommentSchema>({
+        resolver: zodResolver(createCommentSchema),
         defaultValues: {
-            title: quotationToEdit?.title || '',
-            content: quotationToEdit?.content || '',
-            occupation: quotationToEdit?.occupation || '',
+            comment: commentToEdit?.comment || '',
         }
     })
 
 
-    async function onSubmit(input: CreateQuotationSchema) {
+    async function onSubmit(input: CreateCommentSchema) {
         try {
-            if (quotationToEdit) {
-
-                const response: ServerMessage = await updateQuotation({...input, id: quotationToEdit.id})
+            if (commentToEdit) {
+                const response: ServerMessage = await updateComment({...input, id: commentToEdit.id})
                 toast({
-                    title: response.title!,
+                    title: response.title !,
                     description: (
                         <span className='whitespace-pre-line'>
                             {response.message}
@@ -47,17 +43,18 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
                     ),
                     variant: response.type === 'error' ? 'destructive' : 'default',
                 })
-            } else {
-                const response: ServerMessage = await createQuotation(input)
 
+            } else {
+
+                const response: ServerMessage = await createComment(input)
                 toast({
-                    title: response.title!,
+                    title: response.title !,
                     description: (
                         <span className='whitespace-pre-line'>
                             {response.message}
                         </span>
                     ),
-                    variant: response.type === "error" ? 'destructive' : 'default',
+                    variant: response.type === 'error' ? 'destructive' : 'default',
                 })
 
                 form.reset()
@@ -70,19 +67,21 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
                 title: 'Warning!',
                 description: 'Something went wrong, please try again.',
                 variant: 'destructive'
+
             })
 
         }
     }
 
-    async function deleteThisQuotation() {
-        if (!quotationToEdit) return
+    async function deleteThisComment() {
+        if (!commentToEdit) return
         setDeleteInProgress(true)
         try {
-            const response: ServerMessage = await deleteQuotation(quotationToEdit)
+            const response: ServerMessage = await deleteComment(commentToEdit)
             toast({
                 title: response.title!,
                 description: (
+
                     <span className='whitespace-pre-line'>
                             {response.message}
                         </span>
@@ -97,8 +96,7 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
             toast({
                 title: 'Warning!',
                 description: 'Something went wrong, please try again.',
-                variant: 'destructive',
-
+                variant: 'destructive'
             })
         } finally {
             setDeleteInProgress(false)
@@ -112,50 +110,21 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
                 <DialogHeader>
                     <DialogTitle>
                         {
-                            quotationToEdit ? "Edit Quotation" : "Add Quotation"
+                            commentToEdit ? "Edit Comment" : "Add Comment"
                         }
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...form} >
                     <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-3"}>
                         <FormField
-                            name={'title'}
+                            name={"comment"}
                             control={form.control}
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Title:</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder={"Title of Quotation..."} {...field}/>
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name={'occupation'}
-                            control={form.control}
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel>Your Occupation:</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder={"Title of Quotation..."} {...field}/>
-                                    </FormControl>
-                                    <FormDescription>This field is optional</FormDescription>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name={'content'}
-                            control={form.control}
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel>Quote:</FormLabel>
+                                    <FormLabel>Comment:</FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            placeholder={"Enter your quote here..."} {...field}/>
+                                            placeholder={"Reply here..."} {...field}/>
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -163,15 +132,15 @@ export default function AddEditQuotationDialog({open, setOpen, quotationToEdit}:
                         />
                         <DialogFooter className='gap-1 sm:gap-0'>
                             {
-                                quotationToEdit && (
+                                commentToEdit && (
                                     <LoadingButton
                                         loading={deleteInProgress}
                                         variant='destructive'
                                         disabled={form.formState.isSubmitting}
-                                        onClick={deleteThisQuotation}
+                                        onClick={deleteThisComment}
                                         type='button'
                                     >
-                                        Delete Quotation
+                                        Delete Comment
                                     </LoadingButton>
                                 )
                             }

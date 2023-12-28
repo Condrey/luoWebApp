@@ -18,7 +18,7 @@ const IntroductionSection = () => {
                     alt="Image of John Akii Bua"
                 />
                 <div
-                    className="items-center justify-center flex flex-col md:flex-row xl:flex-col gap-4 bg-gray-700 text-gray-50  border p-4 px-6 rounded">
+                    className="items-center justify-center flex flex-col md:flex-row xl:flex-col gap-4 bg-transparent border-0 md:bg-gray-200/20 dark:md:bg-gray-700 text-accent-foreground md:text-slate-800 dark:text-gray-50  md:border p-4 px-6 rounded">
                     <span className="text-7xl">911</span>
                     <span className="max-w-prose px-6">
             {
@@ -35,7 +35,7 @@ const IntroductionSection = () => {
                     {importance.map((item, index) => (
                         <div
                             key={index}
-                            className="flex flex-col sm:flex-row md:flex-col border bg-background rounded  h-auto"
+                            className="flex flex-col sm:flex-row md:flex-col border-0 sm:border bg-transparent  sm:bg-background rounded  h-auto"
                         >
                             <div>
                                 {item.image && (
@@ -48,7 +48,7 @@ const IntroductionSection = () => {
                                     />
                                 )}
                             </div>
-                            <div className="flex gap-4 xl:gap-2  flex-col py-6 px-6 xl:py-4 xl:px-4">
+                            <div className="flex  gap-4 xl:gap-2  flex-col py-6 px-6 xl:py-4 xl:px-4">
                                 <span
                                     className="font-bold text-2xl text-center md:text-left  xl:text-center">{`${item.title.toUpperCase()}`}</span>
                                 <p className="max-w-prose">{item.importance}</p>

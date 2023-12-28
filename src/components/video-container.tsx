@@ -48,8 +48,8 @@ export default function VideoContainer({video, type, fromVideoSection = false}: 
                 <div className='flex justify-center pointer-events-none'>
                     <YouTubePlayer youtubeLink={video.url} youtubeTitle={video.title}/>
                 </div>
-                <span className='max-w-prose px-2'>
-                                <FileVideo className='float-left'/>
+                <div className='max-w-prose px-2'>
+                    <FileVideo className='float-left'/>
                     {video.title}
                     <br/>
                     <span className='text-[12px] font-thin  text-right'>-{createdUpdatedAtTimestamp}</span>
@@ -58,7 +58,7 @@ export default function VideoContainer({video, type, fromVideoSection = false}: 
                         <PlayCircleIcon className='animate-spin '/>
                         Mounted
                     </div>
-        </span>
+                </div>
             </div>
 
         </div>
