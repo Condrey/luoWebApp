@@ -3,12 +3,15 @@ import {FileVideo2} from "lucide-react";
 import AddVideoButton
     from "@/app/(homeNavBarPages)/grievances/video-gallery/[category]/[name]/(components)/addVideoButton";
 import VideoContainer from "@/components/video-container";
+import {fetchVideos} from "@/lib/db/data/video-data";
+import {currentUser} from "@clerk/nextjs";
 
 export default async function VideosSection() {
 
-    const videos = await prisma.videoGallery.findMany()
+    const videos = await fetchVideos()
     const videosCount = await prisma.videoGallery.count()
     const categories = await prisma.videoGalleryDescription.findMany()
+    const user = await currentUser()
 
 
     return <div className='flex flex-col gap-3 px-2'>
@@ -26,7 +29,8 @@ export default async function VideosSection() {
                     ? <>
                         {
                             videos.map((video) => (
-                                    <VideoContainer video={video} key={video.id} fromVideoSection={true}/>
+                                    <VideoContainer video={video} key={video.id} fromVideoSection={true} type={video.type!}
+                                                    categories={categories} userId={user?.id}/>
                                 )
                             )
                         }

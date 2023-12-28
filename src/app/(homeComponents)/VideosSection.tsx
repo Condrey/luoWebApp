@@ -22,7 +22,8 @@ const VideosSection = async () => {
             <div className='grid  md:grid-cols-2 lg:grid-cols-3 items-stretch  gap-6'>
                 {
                     videos.map((video) => (
-                        <VideoContainer key={video.id} video={video} fromVideoSection={true} type={video.type!}/>
+                        <VideoContainer key={video.id} video={video} fromVideoSection={true} type={video.type!}
+                                        categories={categories} userId={user?.id}/>
                     ))
                 }
                 <div className='flex justify-center items-center flex-col gap-4 rounded-md border min-h-60'>

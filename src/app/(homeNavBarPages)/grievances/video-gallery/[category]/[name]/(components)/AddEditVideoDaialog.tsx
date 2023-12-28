@@ -44,7 +44,7 @@ const AddEditVideoDialog = ({open, setOpen, videoToEdit, playlist, categories}: 
             url: videoToEdit?.url || '',
             categoryId: videoToEdit?.categoryId ?? category,
             // description: videoToEdit?.description ?? description,
-            description: '',
+            description: videoToEdit?.description || '',
         }
     })
 
@@ -175,7 +175,7 @@ const AddEditVideoDialog = ({open, setOpen, videoToEdit, playlist, categories}: 
                                 <FormItem>
                                     <FormLabel>Description (You can customize):</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder={"Describe the video"} {...field}/>
+                                        <Textarea placeholder={"Describe the video"} {...field} cols={6}/>
                                     </FormControl>
                                     <FormMessage className='rounded-md  p-1 bg-destructive/20'/>
                                 </FormItem>
@@ -191,7 +191,7 @@ const AddEditVideoDialog = ({open, setOpen, videoToEdit, playlist, categories}: 
                                         onClick={deletePlaylist}
                                         type='button'
                                     >
-                                        Delete Playlist
+                                        Delete Video
                                     </LoadingButton>
                                 )
                             }
