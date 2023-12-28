@@ -43,7 +43,7 @@ export default function VideoContainer({
         }
     }
 
-    return <><Link key={video.id}
+    return <div><Link key={video.id}
                    href={urlLink}
                    onClick={() => setIsLoading(true)}
                    className={cn('flex flex-col md:flex-row xl:flex-col border rounded-md gap-2 p-2 bg-background dark:bg-accent cursor-pointer hover:shadow-2xl', isPlaying ? 'pointer-events-none bg-gradient-to-t  from-amber-500 dark:from-amber-400 to-80%  text-slate-950' : 'bg-gradient-to-b from-blue-400 to-fuchsia-400/20')}>
@@ -80,6 +80,6 @@ export default function VideoContainer({
             <ArrowBigUpIcon className='animate-bounce'/>
             <EditVideoButton videoToEdit={video} categories={categories} playlist={type}/>
         </div>
-    </>
+    </div>
 
 }
