@@ -72,8 +72,8 @@ function UseClassName(link: {
     return cn(
         " flex hover:text-destructive dark:hover:text-primary uppercase ",
         pathName === link.route || pathName.startsWith(link.routeRef)
-            ? "text-destructive dark:text-primary border-b-2 border-destructive dark:border-primary border-dotted"
-            : "text-secondary-foreground dark:text-secondary",
+            ? "text-xl text-destructive dark:text-primary dark:font-bold border-b-2 border-destructive dark:border-primary border-dotted"
+            : "text-secondary-foreground dark:text-slate-500",
     );
 }
 
