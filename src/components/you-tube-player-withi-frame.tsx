@@ -1,9 +1,11 @@
+import YouTubePlayer from "react-player/youtube";
+
 interface YouTubePlayerProps {
   youtubeLink: string;
   youtubeTitle: string | undefined;
 }
 
-export default function YouTubePlayer({
+export default function YouTubePlayerWithiFrame({
   youtubeLink,
   youtubeTitle,
 }: YouTubePlayerProps) {
