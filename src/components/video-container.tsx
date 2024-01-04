@@ -3,7 +3,7 @@ import { VideoGallery, VideoGalleryDescription } from ".prisma/client";
 import { useState } from "react";
 import Link from "next/link";
 import YouTubePlayerWithiFrame from "@/components/you-tube-player-withi-frame";
-import { ArrowBigUpIcon, FileVideo, PlayCircleIcon } from "lucide-react";
+import { FileVideo, PlayCircleIcon } from "lucide-react";
 import { cn, formatDateToLocal } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import EditVideoButton from "@/app/(homeNavBarPages)/grievances/video-gallery/[category]/[name]/(components)/editVideoButton";
@@ -24,7 +24,6 @@ export default function VideoContainer({
   categories,
 }: VideoContainerProps) {
   const params = useParams();
-  console.log(params);
   const isPlaying = params.videoUrl === video.id || params.name === video.id;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const wasUpdated = video.updatedAt > video.createdAt;
@@ -49,10 +48,9 @@ export default function VideoContainer({
         href={urlLink}
         onClick={() => setIsLoading(true)}
         className={cn(
-          "flex flex-col md:flex-row xl:flex-col border rounded-md gap-2 p-2 bg-background dark:bg-accent cursor-pointer hover:shadow-2xl",
-          isPlaying
-            ? "pointer-events-none bg-gradient-to-t  from-amber-500 dark:from-amber-400 to-80%  text-slate-950"
-            : "bg-gradient-to-b from-blue-400 to-fuchsia-400/20",
+          "flex flex-col md:flex-row xl:flex-col border rounded-md gap-2  bg-background dark:bg-accent/50 cursor-pointer hover:shadow-2xl",
+          isPlaying &&
+            "pointer-events-none bg-gradient-to-t  from-amber-500 dark:from-amber-400 to-80% to-amber-300 dark:to-amber-300 text-slate-950",
         )}
       >
         <div className="relative">
@@ -68,7 +66,20 @@ export default function VideoContainer({
                 youtubeTitle={video.title}
               />
             </div>
-            <div className="max-w-prose px-2">
+            <div className="max-w-prose p-2">
+              <div
+                className={cn(
+                  "flex items-center justify-end pointer-events-auto",
+                  video.userId !== userId && "hidden",
+                )}
+              >
+                <EditVideoButton
+                  videoToEdit={video}
+                  categories={categories}
+                  playlist={type}
+                  isIconButton={true}
+                />
+              </div>
               <FileVideo className="float-left" />
               {video.title}
               <br />
@@ -92,19 +103,6 @@ export default function VideoContainer({
           </div>
         </div>
       </Link>
-      <div
-        className={cn(
-          "flex items-center justify-center pointer-events-auto",
-          video.userId !== userId && "hidden",
-        )}
-      >
-        <ArrowBigUpIcon className="animate-bounce" />
-        <EditVideoButton
-          videoToEdit={video}
-          categories={categories}
-          playlist={type}
-        />
-      </div>
     </div>
   );
 }

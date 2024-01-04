@@ -34,11 +34,10 @@ const HomeNavBar = () => {
           <NavigationLinks />
         </div>
         <SmallScreenSizes />
+        <div className="hidden sm:flex justify-start grow items-center  lg:hidden">
+          <Logo />
+        </div>
         <div className="flex justify-end md:justify-between gap-2">
-          <div className="flex justify-center items-center md:hidden">
-            <Logo />
-          </div>
-
           <div className="flex items-center gap-2 ">
             <Button variant="ghost" asChild className="hidden  md:flex">
               <Link href="/contact-us">
@@ -77,7 +76,7 @@ function UseClassName(link: {
   return cn(
     " flex hover:text-destructive dark:hover:text-primary uppercase ",
     pathName === link.route || pathName.startsWith(link.routeRef)
-      ? "text-xl text-destructive dark:text-primary dark:font-bold border-b-2 border-destructive dark:border-primary border-dotted"
+      ? "text-l text-destructive dark:text-primary dark:font-bold border-b-2 border-destructive dark:border-primary border-dotted"
       : "text-secondary-foreground dark:text-slate-500",
   );
 }

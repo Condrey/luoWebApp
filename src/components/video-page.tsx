@@ -35,7 +35,7 @@ export default async function VideoPage({
 
   return (
     <div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 bg">
         <div>
           <span className="md:text-2xl">
             {" "}
@@ -43,7 +43,8 @@ export default async function VideoPage({
           </span>
         </div>
       </div>
-      <div className="flex flex-col xl:flex-row h-full p-4 gap-4">
+
+      <div className="flex flex-col xl:flex-row h-full py-4 gap-4">
         <div className="w-full flex flex-col gap-3">
           <div className="h-[300px] md:h-[500px]">
             <YouTubePlayerWithiFrame
@@ -58,7 +59,7 @@ export default async function VideoPage({
             userId={user?.id}
           />
         </div>
-        <div className="p-2 md:p-4 xl:w-1/3 flex flex-col gap-3  ">
+        <div className="py-2 md:py-4 xl:w-1/3 flex flex-col gap-3  ">
           <div className="flex flex-col gap-3">
             <div className="flex flex-row gap-1">
               <Link
@@ -73,9 +74,12 @@ export default async function VideoPage({
               >
                 Playlists
               </Link>
-              <Badge variant="outline">{`${playlist?.name}`}</Badge>
+              <Badge
+                variant="outline"
+                className="border"
+              >{`${playlist?.name}`}</Badge>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 max-w-prose">
               {videos.map((video) => (
                 <div key={video.id}>
                   <VideoContainer
@@ -106,8 +110,9 @@ function VideoParameters({
     wasUpdated ? video.updatedAt : video.createdAt,
   )}`;
   return (
-    <div className="flex flex-col gap-3 max-w-prose border rounded-sm bg-accent p-2 md:p-4">
+    <div className="space-y-3 max-w-prose md:border rounded-sm md:dark:bg-accent md:bg-background p-2 md:p-4">
       <span className="md:text-2xl">{video?.title}</span>
+      <br />
       <span className="select-all text-xs">-{createdUpdatedAtTimestamp}</span>
       <div className="text-muted-foreground">
         <InfoIcon className="float-left mr-1 whitespace-pre-line" />
@@ -130,11 +135,13 @@ function VideoParameters({
           video.userId !== userId && "hidden",
         )}
       >
-        <EditVideoButton
-          videoToEdit={video}
-          categories={categories}
-          playlist={playlist}
-        />
+        <div className="float-right">
+          <EditVideoButton
+            videoToEdit={video}
+            categories={categories}
+            playlist={playlist}
+          />
+        </div>
       </div>
     </div>
   );

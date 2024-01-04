@@ -12,6 +12,21 @@ export async function fetchVideosCount() {
     }
 
 }
+export async function fetchVideosAndPlaylistCount() {
+    noStore()
+    try {
+       const videoCount=  await prisma.videoGallery.count()
+       const playlistCount=  await prisma.videoGalleryDescription.count()
+        return{
+            videoCount:videoCount.toLocaleString(),
+            playlistCount:playlistCount.toLocaleString()
+        }
+    } catch (e) {
+        console.error('Error fetching videos and playlist count:', e)
+        throw new Error('Failed to fetch videos and playlist count.')
+    }
+
+}
 
 export async function fetchVideosCountByPlaylistId(playlistId: string) {
     noStore()

@@ -48,6 +48,7 @@
     "stream-chat-react": "^11.2.1",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
+    "vaul": "^0.8.0",
     "youtube-player-plus": "^0.1.7",
     "zod": "^3.22.4"
   },
