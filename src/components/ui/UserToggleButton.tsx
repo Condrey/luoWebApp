@@ -1,5 +1,11 @@
 "use client";
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 import React from "react";
@@ -9,11 +15,8 @@ export default function UserToggleButton() {
   const { theme } = useTheme();
   return (
     <>
-      {!user ? (
-        <SignInButton />
-      ) : (
+      <SignedIn>
         <UserButton
-          afterSignOutUrl="/"
           appearance={{
             baseTheme: theme === "dark" ? dark : undefined,
             elements: {
@@ -21,7 +24,10 @@ export default function UserToggleButton() {
             },
           }}
         />
-      )}
+      </SignedIn>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
     </>
   );
 }

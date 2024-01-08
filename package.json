@@ -44,6 +44,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
+    "react-resizable-panels": "^1.0.7",
     "stream-chat": "^8.14.4",
     "stream-chat-react": "^11.2.1",
     "tailwind-merge": "^2.0.0",

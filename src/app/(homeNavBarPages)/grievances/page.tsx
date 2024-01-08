@@ -43,7 +43,7 @@ const GrievancesPage = async () => {
         </Suspense>
         <Suspense fallback={<QuoteCardSkeleton />}>
           <QuoteCard />
-        </Suspense>{" "}
+        </Suspense>
       </div>
       <Suspense fallback={<PopularQuoteTagSkeleton />}>
         <PopularQuoteTag />
@@ -64,98 +64,98 @@ const GrievancesPage = async () => {
 };
 export default GrievancesPage;
 export const metadata = {
-  title: "Grievances",
-  description: `Grievances of both the young, small, great, rich and poor`,
+    title: "Grievances",
+    description: `Grievances of both the young, small, great, rich and poor`,
 };
 
 function SpotlightCard({
-  noOfStories,
-  noOfInterviews,
-}: {
-  noOfStories: number;
-  noOfInterviews: number;
+                           noOfStories,
+                           noOfInterviews,
+                       }: {
+    noOfStories: number;
+    noOfInterviews: number;
 }) {
-  const spotlight = {
-    image: featureImage,
-    title: "Interview with Hon. Jimmy Akena",
-    id: "ldnkskn332mf",
-    category: "Interview",
-  };
+    const spotlight = {
+        image: featureImage,
+        title: "Interview with Hon. Jimmy Akena",
+        id: "ldnkskn332mf",
+        category: "Interview",
+    };
 
-  function ImageSection() {
-    return (
-      <div className="relative text-slate-50">
-        <Image
-          src={spotlight.image}
-          alt={spotlight.title}
-          width={300}
-          height={120}
-          className="w-full h-[300px]  xl:h-[450px] object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 "></div>
-        <div className="absolute inset-x-0 inset-y-2 flex  justify-center">
+    function ImageSection() {
+        return (
+            <div className="relative text-slate-50">
+                <Image
+                    src={spotlight.image}
+                    alt={spotlight.title}
+                    width={300}
+                    height={120}
+                    className="w-full h-[300px]  xl:h-[450px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 "></div>
+                <div className="absolute inset-x-0 inset-y-2 flex  justify-center">
           <span className="flex gap-1 justify-center text-xl md:text-2xl xl:text-4xl uppercase ">
-            <LightbulbIcon size={48} />
+            <LightbulbIcon size={48}/>
             Spotlight
           </span>
-        </div>
+                </div>
 
-        <div className=" absolute inset-y-0 inset-x-0 flex flex-wrap p-3 gap-2 items-end justify-between">
+                <div className=" absolute inset-y-0 inset-x-0 flex flex-wrap p-3 gap-2 items-end justify-between">
           <span className="font-bold bg-slate-900/30 backdrop-blur-2xl break-words  rounded px-2">
             {spotlight.title}
           </span>
-          <Link
-            href={`/grievances/spotlight/${spotlight.id}`}
-            className={cn(
-              "flex gap-1 items-center",
-              buttonVariants({ variant: "default" }),
-            )}
-          >
-            {`Review ${spotlight.category}`}
-            <ArrowRight className="" />
-          </Link>
-        </div>
-      </div>
-    );
-  }
+                    <Link
+                        href={`/grievances/spotlight/${spotlight.id}`}
+                        className={cn(
+                            "flex gap-1 items-center",
+                            buttonVariants({variant: "default"}),
+                        )}
+                    >
+                        {`Review ${spotlight.category}`}
+                        <ArrowRight className=""/>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
-  function ButtonSection() {
-    return (
-      <CardContent className="flex flex-wrap gap-2 justify-center p-3">
-        <Link
-          href={"/grievances/spotlight/stories"}
-          className={cn(
-            "flex gap-1 items-center",
-            buttonVariants({ variant: "default" }),
-          )}
-        >
+    function ButtonSection() {
+        return (
+            <CardContent className="flex flex-wrap gap-2 justify-center p-3">
+                <Link
+                    href={"/grievances/spotlight/stories"}
+                    className={cn(
+                        "flex gap-1 items-center",
+                        buttonVariants({variant: "default"}),
+                    )}
+                >
           <span className="flex gap-1 font-bold">
-            <LucideMic2 />
+            <LucideMic2/>
             Stories
           </span>
-          <span>{noOfStories}</span>
-        </Link>
-        <Link
-          href={"/grievances/spotlight/interviews"}
-          className={cn(
-            "flex gap-1 items-center",
-            buttonVariants({ variant: "destructive" }),
-          )}
-        >
+                    <span>{noOfStories}</span>
+                </Link>
+                <Link
+                    href={"/grievances/spotlight/interviews"}
+                    className={cn(
+                        "flex gap-1 items-center",
+                        buttonVariants({variant: "destructive"}),
+                    )}
+                >
           <span className="flex gap-1 font-bold">
-            <LucideMic />
+            <LucideMic/>
             Interviews
           </span>
-          <span>{noOfInterviews}</span>
-        </Link>
-      </CardContent>
-    );
-  }
+                    <span>{noOfInterviews}</span>
+                </Link>
+            </CardContent>
+        );
+    }
 
-  return (
-    <div className="flex flex-col gap-3 bg-card dark:bg-accent rounded-md  border">
-      <ImageSection />
-      <ButtonSection />
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-3 bg-card dark:bg-accent rounded-md  border">
+            <ImageSection/>
+            <ButtonSection/>
+        </div>
+    );
 }

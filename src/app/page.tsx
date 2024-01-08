@@ -1,9 +1,6 @@
 import { auth } from "@clerk/nextjs";
 import HomeNavBar from "@/app/(homeComponents)/NavBar";
 import BannerSection from "@/app/(homeComponents)/BannerSection";
-import CommentSection, {
-  CommentSectionSkeleton,
-} from "@/app/(homeComponents)/CommentSection";
 import IntroductionSection from "@/app/(homeComponents)/IntroductionSection";
 import VideosSection, {
   VideosSectionSkeleton,
@@ -18,9 +15,9 @@ export default function Home() {
       <HomeNavBar />
       <div className="flex flex-col gap-12">
         <BannerSection />
-        <Suspense fallback={<CommentSectionSkeleton />}>
-          <CommentSection />
-        </Suspense>
+        {/*<Suspense fallback={<CommentSectionSkeleton />}>*/}
+        {/*  <CommentSection />*/}
+        {/*</Suspense>*/}
         <IntroductionSection />
         <Suspense fallback={<VideosSectionSkeleton />}>
           <VideosSection />
