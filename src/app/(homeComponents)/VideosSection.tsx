@@ -5,14 +5,14 @@ import { ArrowRightIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import AddVideoButton from "@/app/(homeNavBarPages)/grievances/video-gallery/[category]/[name]/(components)/addVideoButton";
 import { fetchPlaylists } from "@/lib/db/data/playlist-data";
-import { currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const VideosSection = async () => {
   const videos = await fetchVideosByNumber(7);
   const categories = await fetchPlaylists();
-  const user = await currentUser();
+  const { user } = await auth();
   return (
     <div className="flex px-4 flex-col items-center gap-6">
       <div className="max-w-7xl ">

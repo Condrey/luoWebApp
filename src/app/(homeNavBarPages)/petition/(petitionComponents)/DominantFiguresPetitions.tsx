@@ -37,7 +37,7 @@ export default async function DominantFiguresPetitions() {
             </Avatar>
             <span className="mb-4">{`${petition.user.firstName} ${petition.user.lastName}`}</span>
             <span>{petition.district}</span>
-            <span className="text-xs">{petition.createdAt}</span>
+            <span className="text-xs">{petition.createdAtTime}</span>
           </div>
         ))}
         <Badge variant="secondary" className="text-2xl">

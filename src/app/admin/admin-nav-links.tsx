@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   Heading,
@@ -8,16 +9,21 @@ import {
   ThumbsUp,
   User,
   Videotape,
+  Vote,
 } from "lucide-react";
 import React from "react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function AdminNavLinks() {
+  const pathName = usePathname();
   const links: {
     name: string;
     href: string;
     icon: LucideIcon;
   }[] = [
     { name: "Users", href: "/admin/users", icon: User },
+    { name: "Petitions", href: "/admin/petitions", icon: Vote },
     { name: "Videos", href: "/admin/videos", icon: Videotape },
     { name: "Playlists", href: "/admin/playlists", icon: ListVideo },
     { name: "Quotes", href: "/admin/quotes", icon: MessageCircle },
@@ -38,7 +44,11 @@ export default function AdminNavLinks() {
           <div key={link.name} className="block">
             <Link
               href={link.href}
-              className="flex hover:text-amber-500 dark:text-amber-300 gap-2 "
+              className={cn(
+                "flex hover:text-amber-500 dark:hover:text-amber-300 gap-2 ",
+                pathName === link.href &&
+                  "text-amber-500 dark:text-amber-300 font-bold",
+              )}
             >
               <Icon /> {link.name}
             </Link>

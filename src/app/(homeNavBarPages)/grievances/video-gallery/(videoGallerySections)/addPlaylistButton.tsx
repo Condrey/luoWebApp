@@ -15,6 +15,6 @@ export default function AddPlaylistButton() {
             <Plus className="mr-2"/>
             Add Playlist
         </Button>
-        <AddEditPlaylistDialog open={showAddEditPlaylistDialog} setOpen={setShowAddEditPlaylistDialog}/>
+        <AddEditPlaylistDialog open={showAddEditPlaylistDialog} setOpen={setShowAddEditPlaylistDialog} />
     </>
 }

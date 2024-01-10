@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/resizable";
 import AdminNavLinks from "@/app/admin/admin-nav-links";
 import UserToggleButton from "@/components/ui/UserToggleButton";
+import ThemeToggleButton from "@/components/ThemeToggleButton";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,15 +16,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <span className="font-semibold">Navigation</span>
           <AdminNavLinks />
           <UserToggleButton />
+          <ThemeToggleButton />
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel
-        defaultSize={75}
-        className="rounded-tl-xl rounded-bl-xl bg-accent"
-      >
-        <div className="flex h-full items-center justify-center p-6">
-          <span className="font-semibold">Content</span>
+      <ResizablePanel defaultSize={75} className=" ">
+        <div className="flex flex-col  gap-6 p-6 h-dvh  overflow-y-scroll ">
           {children}
         </div>
       </ResizablePanel>
