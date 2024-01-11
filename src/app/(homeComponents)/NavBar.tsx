@@ -28,8 +28,8 @@ import { useUser } from "@clerk/nextjs";
 const HomeNavBar = () => {
   const { user } = useUser();
   return (
-    <div className="sticky top-0 backdrop-blur-2xl bg-background/50 p-4   z-10 shadow dark:shadow-none">
-      <div className="flex  gap-3 justify-between items-center  max-w-7xl">
+    <div className="sticky top-0 backdrop-blur-2xl bg-background/50 p-4 h-[56px] items-center flex w-dvw    z-10 shadow dark:shadow-none">
+      <div className="flex  gap-3 justify-between items-center w-full  max-w-7xl ">
         <div className=" flex-wrap gap-3 items-center hidden lg:flex">
           <NavigationLinks />
         </div>
