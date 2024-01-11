@@ -7,7 +7,9 @@ export async function fetchUniqueLikeOrDislike() {
 
   try {
     const { userId } = await auth();
-    return  await prisma.topicLikeOrDisLike.findUnique({ where: { authorId:userId } });
+    return await prisma.topicLikeOrDisLike.findUnique({
+      where: { authorId: userId! as string },
+    });
   } catch (e) {
     console.error("Error occurred:", e);
     throw new Error("Failed to execute request.");
