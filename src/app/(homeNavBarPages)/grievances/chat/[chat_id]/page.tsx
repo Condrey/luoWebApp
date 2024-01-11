@@ -2,14 +2,15 @@ import { fetchUniqueTopic } from "@/lib/db/data/topic-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DialogFooter } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { LucideReply, LucideThumbsDown, LucideThumbsUp } from "lucide-react";
+import { LucideReply } from "lucide-react";
 import EditTopicButton from "@/app/(homeNavBarPages)/grievances/chat/edit-topic-button";
 import CommentForm from "@/app/(homeNavBarPages)/grievances/chat/[chat_id]/comment-form";
 import { currentUser } from "@clerk/nextjs";
 import EditCommentButton from "@/app/(homeNavBarPages)/grievances/chat/[chat_id]/edit-comment-button";
 import { AutoScrollDiv } from "@/components/ui/auto-scroll-div";
-import { Topic } from "@prisma/client";
+import { Topic, TopicLikeOrDisLike } from "@prisma/client";
+import LikeButton from "@/app/(homeNavBarPages)/grievances/chat/like-button";
+import DislikeButton from "@/app/(homeNavBarPages)/grievances/chat/dislike-button";
 
 export default async function Page({
   params,
@@ -23,10 +24,13 @@ export default async function Page({
   const numberOfComments = topic?.numberOfComments;
   const numberOfDislikes = topic?.numberOfDisLikes;
   const topicComments = topic?.wholeComments;
+  const userLikeOrDislike = topic?.topicLikeOrDisLikes.filter(
+    (item) => item.authorId === user?.id,
+  );
   return (
     <AutoScrollDiv
       id="discussions"
-      className="grow px-4 md:px-6 pt-4 md:pt-6 overflow-y-auto scroll-smooth flex flex-col gap-6 absolute top-0  "
+      className="md:min-w-[620px]  grow px-4 md:px-6 pt-4 md:pt-6 overflow-y-auto scroll-smooth flex flex-col gap-6 absolute top-0  "
     >
       <TopicDiv
         topic={topic!}
@@ -37,6 +41,7 @@ export default async function Page({
         numberOfComments={numberOfComments!}
         numberOfLikes={numberOfLikes!}
         userId={user?.id!}
+        userLikeOrDislike={userLikeOrDislike![0]}
       />
 
       <span
@@ -53,12 +58,18 @@ export default async function Page({
             <div
               key={topicComment.id}
               className={cn(
-                "flex",
+                "flex gap-2",
                 topicComment!.authorId === user?.id
-                  ? "justify-end"
+                  ? "justify-end flex-row-reverse"
                   : "justify-start",
               )}
             >
+              <Avatar>
+                <AvatarImage src={topicComment!.imageUrl} />
+                <AvatarFallback>
+                  {topicComment!.userName?.substring(0, 1)}
+                </AvatarFallback>
+              </Avatar>
               <div
                 className={cn(
                   "w-9/12  border rounded-md p-3 flex gap-2 bg-gradient-to-bl from-amber-500/20 dark:from-slate-800 to-background border-amber-500 dark:border-border ",
@@ -66,13 +77,6 @@ export default async function Page({
                     " bg-gradient-to-br flex-row-reverse from-transparent border-border border-2  dark:from-transparent",
                 )}
               >
-                <Avatar>
-                  <AvatarImage src={topicComment!.imageUrl} />
-                  <AvatarFallback>
-                    {topicComment!.userName?.substring(0, 1)}
-                  </AvatarFallback>
-                </Avatar>
-
                 <div className="flex flex-col gap-1 grow">
                   <span className="text-sm">{topicComment!.comment}</span>
                   <span className="text-xs text-slate-700 ">{`${topicComment.userName} - ${topicComment.createdUpdatedAtTimestamp}`}</span>
@@ -95,7 +99,7 @@ export default async function Page({
       </div>
       <div
         id="reply zone"
-        className="sticky w-full bottom-0 right-0 backdrop-blur-2xl px-2 pt-2 pb-6 md:pb-12 rounded-t-md"
+        className="sticky w-full bottom-0 right-0 backdrop-blur-2xl  pt-2  md:pb-12 rounded-t-md"
       >
         <CommentForm topicId={topic?.id} />
       </div>
@@ -112,6 +116,7 @@ interface TopicProps {
   numberOfComments: string;
   numberOfLikes: string;
   userId: string;
+  userLikeOrDislike: TopicLikeOrDisLike;
 }
 
 function TopicDiv({
@@ -123,6 +128,7 @@ function TopicDiv({
   userId,
   numberOfDislikes,
   numberOfComments,
+  userLikeOrDislike,
 }: TopicProps) {
   return (
     <div className="border rounded-md p-3 mt-[95px] md:mt-0 flex gap-2 bg-gradient-to-br from-amber-500/20 dark:from-slate-800 to-background border-amber-500 dark:border-border">
@@ -135,23 +141,16 @@ function TopicDiv({
         <span className="text-xs text-slate-700 ">{`${userName} - ${createdUpdatedAtTimestamp}`}</span>
         <DialogFooter className="flex items-center justify-between gap-3">
           <div className="flex gap-2 items-center grow justify-center">
-            <span
-              className={cn(
-                buttonVariants({ variant: "ghost" }),
-                `flex items-end gap-1 cursor-pointer`,
-              )}
-            >
-              <span>{numberOfLikes}</span> <LucideThumbsUp />
-            </span>
-            <div
-              className={cn(
-                buttonVariants({ variant: "ghost" }),
-                `flex items-end gap-1 cursor-pointer`,
-              )}
-            >
-              <LucideThumbsDown />
-              <span>{numberOfDislikes}</span>
-            </div>
+            <LikeButton
+              numberOfLikes={numberOfLikes}
+              topicId={topic.id}
+              userLikeOrDislike={userLikeOrDislike}
+            />
+            <DislikeButton
+              numberOfDislikes={numberOfDislikes}
+              topicId={topic.id}
+              userLikeOrDislike={userLikeOrDislike}
+            />
             <span className={cn(" flex items-end gap-1 text-slate-700")}>
               <LucideReply />
               <span>{numberOfComments}</span>

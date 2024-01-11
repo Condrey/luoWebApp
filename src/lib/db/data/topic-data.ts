@@ -1,7 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import prisma from "@/lib/db/prisma";
 import { formatDateToLocal } from "@/lib/utils";
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient, currentUser } from "@clerk/nextjs";
 
 export async function fetchTopics() {
   noStore();
@@ -13,6 +13,7 @@ export async function fetchTopics() {
     return await Promise.all(
       data.map(async (item) => {
         const user = await clerkClient.users.getUser(item.authorId);
+        const thisUser = await currentUser();
         const numberOfComments = item.comments.length;
         const numberOfLikes =
           item.topicLikeOrDisLikes.filter(
@@ -26,9 +27,13 @@ export async function fetchTopics() {
         const createdUpdatedAtTimestamp = wasUpdated
           ? item.updatedAt
           : item.createdAt;
+        const userLikesOrDislikes = item.topicLikeOrDisLikes.filter(
+          (value) => value.authorId === thisUser?.id,
+        );
 
         return {
           ...item,
+          userLikesOrDislikes,
           createdUpdatedAtTimestamp: `${formatDateToLocal(
             createdUpdatedAtTimestamp,
           )} ${wasUpdated ? " (edited)" : ""} `,

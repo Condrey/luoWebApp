@@ -1,16 +1,29 @@
 import HomeNavBar from "@/app/(homeComponents)/NavBar";
-import {webPageName} from "@/lib/constants/Constants";
+import { webPageEmail, webPageName } from "@/lib/constants/Constants";
+import Link from "next/link";
 
 const ContactUsPage = () => {
-    return <div>
-        <HomeNavBar/>
-        Contact us
+  return (
+    <div className="h-dvh">
+      <HomeNavBar />
+      <div className="flex flex-col size-full items-center justify-center">
+        <span className="max-w-prose flex gap-2">
+          Contact us on
+          <Link
+            href={`mailto:${webPageEmail}`}
+            className="text-sky-800 dark:text-sky-500"
+          >
+            {webPageEmail}
+          </Link>
+        </span>
+      </div>
     </div>
-}
-export default ContactUsPage
+  );
+};
+export default ContactUsPage;
 export const metadata = {
-    title: `${webPageName}: Contact us about the website through emails`
-}
+  title: `${webPageName}: Contact us about the website through emails`,
+};
 /**
  * Certainly! Here's an example of how you could structure the "Contact Us" section:
  *

@@ -5,6 +5,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export default async function DominantFiguresPetitions() {
   const petitions = await fetchPetitions();
@@ -35,13 +36,20 @@ export default async function DominantFiguresPetitions() {
                 {petition.user.username?.substring(0, 1)}
               </AvatarFallback>
             </Avatar>
-            <span className="mb-4">{`${petition.user.firstName} ${petition.user.lastName}`}</span>
+            <span className="mb-4">{`${
+              petition.user.firstName ||
+              petition.user.lastName ||
+              petition.user.emailAddresses[0].emailAddress
+            }`}</span>
             <span>{petition.district}</span>
             <span className="text-xs">{petition.createdAtTime}</span>
           </div>
         ))}
-        <Badge variant="secondary" className="text-2xl">
-          {`+${otherPetitions!.toLocaleString()} total signature${
+        <Badge
+          variant="secondary"
+          className={cn("text-2xl", otherPetitions === null && "hidden")}
+        >
+          {`+${otherPetitions?.toLocaleString()} total signature${
             otherPetitions === 1 ? "" : "s"
           }`}
         </Badge>

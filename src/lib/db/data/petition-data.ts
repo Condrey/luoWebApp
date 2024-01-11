@@ -47,6 +47,7 @@ export async function fetchPetitionNumber() {
 
 export async function fetchPetitionStatistics() {
   try {
+    const totalPetition = await prisma.petition.count();
     const query = await prisma.petition.groupBy({
       by: ["district"],
       _count: {
@@ -65,6 +66,10 @@ export async function fetchPetitionStatistics() {
     return query.map((item) => {
       return {
         ...item,
+        percentage: `${((item._count.district / totalPetition) * 100).toFixed(
+          1,
+        )}% 
+• ${item._count.district.toLocaleString()}/${totalPetition.toLocaleString()} `,
         number: `${item._count.district.toLocaleString()} petition signature${
           item._count.district === 1 ? "" : "s"
         }`,
